@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Play, Pause, Volume2, Maximize, CheckCircle, ChevronLeft, ChevronRight, Lock, FileText, MessageSquare, StickyNote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,50 +8,110 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import Navbar from "@/components/layout/Navbar";
-import { courses } from "@/data/mockData";
+import { useCourses } from "@/hooks/useCourses";
+import { useAuth } from "@/hooks/useAuth";
+import VideoPlayer from "@/components/courses/VideoPlayer";
 
 export default function CoursePlayer() {
   const { courseId, lessonId } = useParams();
-  const course = courses.find((c) => c.id === courseId) || courses[0];
-  const allLessons = course.modules.flatMap((m) => m.lessons);
-  const currentIdx = allLessons.findIndex((l) => l.id === lessonId);
-  const currentLesson = allLessons[currentIdx] || allLessons[0];
-  const [playing, setPlaying] = useState(false);
-  const [completed, setCompleted] = useState<string[]>(["l1"]);
+  const navigate = useNavigate();
+  const { getCourseById, isLoading } = useCourses();
+  const { getCompletedLessons, completeLesson } = useAuth();
+  
+  const course = courseId ? getCourseById(courseId) : undefined;
+  
+  const [completed, setCompleted] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
-  const progress = Math.round((completed.length / allLessons.length) * 100);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const allLessonIdsStr = course?.modules.flatMap(m => m.lessons.map(l => l.id)).join(',');
+
+  useEffect(() => {
+    if (!allLessonIdsStr) return;
+    const lessonIds = allLessonIdsStr.split(',');
+    getCompletedLessons(lessonIds).then(completedIds => {
+        setCompleted(completedIds);
+    });
+  }, [allLessonIdsStr, getCompletedLessons]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Navbar />
+        <div className="flex-1 flex flex-col items-center justify-center py-40">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+          <p className="text-muted-foreground">Cargando clase...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!course || !course.modules || course.modules.length === 0) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center p-20 text-center text-muted-foreground">
+          No se pudieron cargar las lecciones de este curso.
+        </div>
+      </div>
+    );
+  }
+
+  const allLessons = course.modules.flatMap((m) => m.lessons || []);
+  const currentIdx = allLessons.findIndex((l) => l.id === lessonId);
+  const currentLesson = currentIdx !== -1 ? allLessons[currentIdx] : allLessons[0];
+
+  const progress = allLessons.length > 0 ? Math.round((completed.length / allLessons.length) * 100) : 0;
 
   const prevLesson = currentIdx > 0 ? allLessons[currentIdx - 1] : null;
   const nextLesson = currentIdx < allLessons.length - 1 ? allLessons[currentIdx + 1] : null;
+
+  const handleVideoEnded = async () => {
+    if (course && !completed.includes(currentLesson.id) && !isUpdating) {
+      setIsUpdating(true);
+      const success = await completeLesson(course.id, currentLesson.id, completed, allLessons.length);
+      if (success) {
+        setCompleted([...completed, currentLesson.id]);
+        if (nextLesson) {
+          navigate(`/learn/${course.id}/${nextLesson.id}`);
+        }
+      }
+      setIsUpdating(false);
+    } else if (completed.includes(currentLesson.id) && nextLesson) {
+      // Si ya estaba completada, simplemente avanzar al terminar el video
+      navigate(`/learn/${course.id}/${nextLesson.id}`);
+    }
+  };
+
+  const handleMarkComplete = async () => {
+    if (course && !completed.includes(currentLesson.id) && !isUpdating) {
+      setIsUpdating(true);
+      const success = await completeLesson(course.id, currentLesson.id, completed, allLessons.length);
+      if (success) {
+        setCompleted([...completed, currentLesson.id]);
+        if (nextLesson) {
+          navigate(`/learn/${course.id}/${nextLesson.id}`);
+        }
+      }
+      setIsUpdating(false);
+    } else if (completed.includes(currentLesson.id) && nextLesson) {
+      navigate(`/learn/${course.id}/${nextLesson.id}`);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="flex flex-col lg:flex-row">
         {/* Main */}
-        <div className="flex-1 p-4 lg:p-6">
+        <div className="flex-1 p-4 lg:p-6 lg:max-w-4xl mx-auto w-full">
           {/* Video Player */}
-          <div className="relative bg-secondary rounded-xl aspect-video mb-4 flex items-center justify-center overflow-hidden">
-            <div className="text-center text-primary-foreground">
-              <button onClick={() => setPlaying(!playing)} className="h-16 w-16 rounded-full bg-primary/80 backdrop-blur flex items-center justify-center hover:bg-primary transition-colors mx-auto mb-3">
-                {playing ? <Pause className="h-6 w-6 text-primary-foreground" /> : <Play className="h-6 w-6 text-primary-foreground ml-1" />}
-              </button>
-              <p className="text-sm text-muted-foreground">{currentLesson.title}</p>
-            </div>
-            {/* Controls bar */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-secondary/90 to-transparent p-4">
-              <div className="h-1 bg-muted-foreground/20 rounded-full mb-3"><div className="h-full w-1/3 bg-primary rounded-full" /></div>
-              <div className="flex items-center justify-between text-primary-foreground">
-                <div className="flex items-center gap-3">
-                  <button onClick={() => setPlaying(!playing)}>{playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}</button>
-                  <span className="text-xs">5:23 / {currentLesson.duration}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Volume2 className="h-4 w-4" />
-                  <Maximize className="h-4 w-4" />
-                </div>
-              </div>
-            </div>
+          <div className="mb-6">
+            <VideoPlayer
+              url={currentLesson.videoUrl || ""}
+              title={currentLesson.title}
+              onEnded={handleVideoEnded}
+            />
           </div>
 
           <h2 className="text-xl font-bold mb-4">{currentLesson.title}</h2>
@@ -138,11 +198,11 @@ export default function CoursePlayer() {
 
           <div className="mt-4 space-y-3">
             <Button
-              onClick={() => { if (!completed.includes(currentLesson.id)) setCompleted([...completed, currentLesson.id]); }}
+              onClick={handleMarkComplete}
               className="w-full gradient-hero text-primary-foreground border-0"
-              disabled={completed.includes(currentLesson.id)}
+              disabled={completed.includes(currentLesson.id) || isUpdating}
             >
-              {completed.includes(currentLesson.id) ? "✓ Completada" : "Marcar como Completada"}
+              {completed.includes(currentLesson.id) ? "✓ Completada" : (isUpdating ? "Guardando..." : "Marcar como Completada")}
             </Button>
             <div className="flex gap-2">
               {prevLesson && <Link to={`/learn/${course.id}/${prevLesson.id}`} className="flex-1"><Button variant="outline" className="w-full text-xs"><ChevronLeft className="h-3 w-3 mr-1" />Anterior</Button></Link>}

@@ -1,137 +1,64 @@
-export interface Course {
-  id: string;
-  title: string;
-  description: string;
-  longDescription: string;
-  category: "marketing" | "ia";
-  categoryLabel: string;
-  level: "Principiante" | "Intermedio" | "Avanzado";
-  price: number;
-  isFree: boolean;
-  rating: number;
-  students: number;
-  instructor: string;
-  duration: string;
-  lessonsCount: number;
-  thumbnail: string;
-  isNew?: boolean;
-  isPopular?: boolean;
-  updatedAt: string;
-  modules: Module[];
-  whatYouLearn: string[];
-  requirements: string[];
-  forWho: string[];
-}
+// ─────────────────────────────────────────────────────────────
+// Tipos importados desde lib/types.ts (fuente única de verdad)
+// ─────────────────────────────────────────────────────────────
+import type {
+  Course,
+  User,
+  Testimonial,
+  ForumThread,
+  Notification,
+  LeaderboardEntry,
+} from "@/lib/types";
 
-export interface Module {
-  id: string;
-  title: string;
-  lessons: Lesson[];
-}
-
-export interface Lesson {
-  id: string;
-  title: string;
-  duration: string;
-  isFree: boolean;
-  isCompleted?: boolean;
-}
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatar: string;
-  plan: "free" | "pro" | "elite";
-  points: number;
-  streak: number;
-  position: number;
-  coursesInProgress: number;
-  coursesCompleted: number;
-  totalHours: number;
-  badges: Badge[];
-  enrolledCourses: EnrolledCourse[];
-}
-
-export interface Badge {
-  id: string;
-  name: string;
-  icon: string;
-  description: string;
-  unlocked: boolean;
-  unlockedAt?: string;
-}
-
-export interface EnrolledCourse {
-  courseId: string;
-  progress: number;
-  lastLesson: string;
-  completed: boolean;
-}
-
-export interface Testimonial {
-  name: string;
-  title: string;
-  avatar: string;
-  quote: string;
-  rating: number;
-}
-
-export interface ForumThread {
-  id: string;
-  title: string;
-  preview: string;
-  author: string;
-  authorAvatar: string;
-  category: string;
-  replies: number;
-  upvotes: number;
-  lastActivity: string;
-  solved: boolean;
-}
-
-export interface Notification {
-  id: string;
-  message: string;
-  time: string;
-  read: boolean;
-}
+export type {
+  Course,
+  Module,
+  Lesson,
+  Resource,
+  User,
+  Badge,
+  EnrolledCourse,
+  Testimonial,
+  ForumThread,
+  ForumReply,
+  Notification,
+  LeaderboardEntry,
+} from "@/lib/types";
 
 export const courses: Course[] = [
   {
     id: "ia-marketing-7-dias",
     title: "IA para Marketing en 7 Días",
-    description: "Aprende a integrar inteligencia artificial en tu estrategia de marketing digital en solo una semana.",
+    description: "Aprenda a integrar inteligencia artificial en su estrategia de marketing digital en solo una semana con casos prácticos.",
     longDescription: "Este curso intensivo te llevará de cero a experto en el uso de herramientas de IA para marketing digital. Aprenderás a crear contenido con ChatGPT, automatizar campañas y analizar datos con IA.",
     category: "marketing",
-    categoryLabel: "Marketing Digital con IA",
+    categoryLabel: "Marketing Digital",
     level: "Principiante",
-    price: 0,
-    isFree: true,
-    rating: 4.8,
-    students: 1234,
+    price: 49.99,
+    isFree: false,
+    rating: 4.9,
+    students: 1250,
     instructor: "David Ames",
-    duration: "2.5 horas",
-    lessonsCount: 7,
-    thumbnail: "",
+    duration: "4 horas",
+    lessonsCount: 12,
+    thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
     isPopular: true,
-    updatedAt: "Enero 2026",
+    updatedAt: "Octubre 2023",
     modules: [
       {
         id: "m1",
-        title: "Día 1: Introducción a la IA en Marketing",
+        title: "Día 1: Fundamentos de IA en Marketing",
         lessons: [
-          { id: "l1", title: "¿Qué es la IA y por qué importa?", duration: "15:00", isFree: true },
-          { id: "l2", title: "Panorama de herramientas de IA", duration: "20:00", isFree: true },
-          { id: "l3", title: "Tu primera automatización", duration: "18:00", isFree: true },
+          { id: "l1", title: "Introducción y bienvenida", duration: "10:00", isFree: true, isCompleted: true, videoUrl: "https://www.youtube.com/watch?v=LXb3EKWsInQ" },
+          { id: "l2", title: "¿Qué es la IA generativa?", duration: "15:30", isFree: true, isCompleted: false, videoUrl: "https://www.youtube.com/watch?v=ysz5S6PUM-U" },
         ],
       },
       {
         id: "m2",
-        title: "Día 2: ChatGPT para Content Marketing",
+        title: "Día 2: Creación de Contenido con ChatGPT",
         lessons: [
-          { id: "l4", title: "Prompts efectivos para marketing", duration: "22:00", isFree: false },
-          { id: "l5", title: "Creando contenido viral con IA", duration: "25:00", isFree: false },
+          { id: "l3", title: "Prompts eficientes para copy", duration: "20:00", isFree: false, isCompleted: false, videoUrl: "https://www.youtube.com/watch?v=jNQXAC9IVRw" },
+          { id: "l4", title: "Automatizando blogs y redes sociales", duration: "25:00", isFree: false, isCompleted: false, videoUrl: "https://www.youtube.com/watch?v=VlPiUkzgjcI" },
         ],
       },
       {

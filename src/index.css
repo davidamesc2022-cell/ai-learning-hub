@@ -72,6 +72,15 @@
     --border: 220 15% 20%;
     --input: 220 15% 20%;
     --ring: 210 59% 50%;
+
+    --sidebar-background: 240 5.3% 26.1%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 210 59% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 210 59% 50%;
   }
 }
 
@@ -106,5 +115,12 @@
   }
   .card-hover-accent {
     @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-accent;
+  }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-out;
   }
 }

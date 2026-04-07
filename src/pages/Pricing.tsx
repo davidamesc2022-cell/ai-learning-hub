@@ -7,57 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
-const plans = [
-  {
-    name: "Free",
-    monthly: 0,
-    annual: 0,
-    badge: "Más Popular",
-    features: [
-      { text: "5 cursos gratuitos", included: true },
-      { text: "Acceso a comunidad básica", included: true },
-      { text: "Certificados digitales", included: true },
-      { text: "Cursos premium", included: false },
-      { text: "Webinars en vivo", included: false },
-      { text: "Soporte prioritario", included: false },
-    ],
-    cta: "Comenzar Gratis",
-    highlighted: false,
-  },
-  {
-    name: "Pro",
-    monthly: 29,
-    annual: 24,
-    badge: "Recomendado",
-    features: [
-      { text: "TODO lo de Free", included: true },
-      { text: "Acceso a TODOS los cursos premium", included: true },
-      { text: "Comunidad completa", included: true },
-      { text: "Certificados verificados", included: true },
-      { text: "Soporte prioritario", included: true },
-      { text: "Webinars exclusivos", included: false },
-    ],
-    cta: "Comenzar Prueba Gratis",
-    highlighted: true,
-  },
-  {
-    name: "Elite",
-    monthly: 99,
-    annual: 79,
-    badge: "Mejor Valor",
-    features: [
-      { text: "TODO lo de Pro", included: true },
-      { text: "Webinars mensuales en vivo", included: true },
-      { text: "2 sesiones 1-on-1 al mes", included: true },
-      { text: "Acceso anticipado a nuevos cursos", included: true },
-      { text: "Soporte VIP 24/7", included: true },
-      { text: "Networking exclusivo", included: true },
-    ],
-    cta: "Comenzar Elite",
-    highlighted: false,
-  },
-];
-
+import { plans } from "@/data/constants";
 const faqs = [
   { q: "¿Puedo cancelar mi suscripción en cualquier momento?", a: "Sí, puedes cancelar tu suscripción cuando quieras sin penalización. Mantendrás el acceso hasta el final de tu período de facturación." },
   { q: "¿Qué métodos de pago aceptan?", a: "Aceptamos tarjetas de crédito/débito (Visa, Mastercard, AMEX) y PayPal." },
@@ -86,7 +36,7 @@ export default function Pricing() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {plans.map((plan) => {
-            const price = annual ? plan.annual : plan.monthly;
+            const price = annual ? plan.annualPrice : plan.monthlyPrice;
             return (
               <div key={plan.name} className={`bg-card rounded-xl border p-6 card-hover relative ${plan.highlighted ? "border-primary shadow-xl ring-2 ring-primary/20 scale-105" : "border-border"}`}>
                 {plan.highlighted && <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 gradient-hero text-primary-foreground border-0 px-4">{plan.badge}</Badge>}
@@ -94,7 +44,7 @@ export default function Pricing() {
                 <div className="mb-6">
                   <span className="text-4xl font-extrabold">${price}</span>
                   <span className="text-muted-foreground text-sm">/mes</span>
-                  {annual && plan.monthly > 0 && <p className="text-xs text-muted-foreground mt-1">Facturado anualmente (${price * 12}/año)</p>}
+                  {annual && plan.monthlyPrice > 0 && <p className="text-xs text-muted-foreground mt-1">Facturado anualmente (${price * 12}/año)</p>}
                 </div>
                 <ul className="space-y-3 mb-6">
                   {plan.features.map((f) => (
@@ -104,7 +54,7 @@ export default function Pricing() {
                     </li>
                   ))}
                 </ul>
-                <Button className={`w-full ${plan.highlighted ? "gradient-hero text-primary-foreground border-0" : ""}`} variant={plan.highlighted ? "default" : "outline"} size="lg">
+                <Button className={`w-full ${plan.highlighted ? "gradient-hero text-primary-foreground border-0" : "bg-secondary text-secondary-foreground hover:bg-secondary/80 font-bold border-0"}`} variant={plan.highlighted ? "default" : "secondary"} size="lg">
                   {plan.cta}
                 </Button>
               </div>
