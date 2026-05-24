@@ -56,7 +56,7 @@ function LoginFormComponent() {
   const [showPass, setShowPass] = useState(false);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
-  const { login, isLoading, error } = useAuth();
+  const { login, loginWithGoogle, isLoading, error } = useAuth();
 
   const {
     register,
@@ -173,7 +173,7 @@ function LoginFormComponent() {
         </div>
       </div>
 
-      <Button type="button" variant="outline" className="w-full" size="lg">
+      <Button type="button" variant="outline" className="w-full" size="lg" onClick={loginWithGoogle}>
         <GoogleIcon /> Google
       </Button>
     </form>
@@ -187,7 +187,7 @@ function RegisterFormComponent() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [registeredName, setRegisteredName] = useState("");
   const navigate = useNavigate();
-  const { register: registerUser, isLoading, error } = useAuth();
+  const { register: registerUser, loginWithGoogle, isLoading, error } = useAuth();
 
   const {
     register,
@@ -364,7 +364,7 @@ function RegisterFormComponent() {
         </div>
       </div>
 
-      <Button type="button" variant="outline" className="w-full" size="lg">
+      <Button type="button" variant="outline" className="w-full" size="lg" onClick={loginWithGoogle}>
         <GoogleIcon /> Google
       </Button>
 

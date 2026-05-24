@@ -105,6 +105,29 @@ export function useAuth() {
         }
     }, []);
 
+    // ── Login con Google ──────────────────────────────────────
+    const loginWithGoogle = useCallback(async (): Promise<boolean> => {
+        setState((prev) => ({ ...prev, isLoading: true, error: null }));
+        try {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: "google",
+                options: {
+                    redirectTo: `${window.location.origin}/dashboard`
+                }
+            });
+
+            if (error) throw error;
+            return true;
+        } catch (error: any) {
+            setState((prev) => ({
+                ...prev,
+                isLoading: false,
+                error: error.message || "Error al iniciar sesión con Google.",
+            }));
+            return false;
+        }
+    }, []);
+
     // ── Registro ───────────────────────────────────────────────
     const register = useCallback(async (data: RegisterCredentials): Promise<boolean> => {
         setState((prev) => ({ ...prev, isLoading: true, error: null }));
@@ -337,6 +360,7 @@ export function useAuth() {
         isLoading: state.isLoading,
         error: state.error,
         login,
+        loginWithGoogle,
         register,
         logout,
         clearError,
