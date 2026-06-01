@@ -24,7 +24,7 @@ export default function CoursePlayer() {
   const [notes, setNotes] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const allLessonIdsStr = course?.modules.flatMap(m => m.lessons.map(l => l.id)).join(',');
+  const allLessonIdsStr = course?.modules?.flatMap(m => m.lessons?.map(l => l.id) || [])?.join(',') || '';
 
   useEffect(() => {
     if (!allLessonIdsStr) return;
