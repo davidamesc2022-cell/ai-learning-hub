@@ -128,14 +128,23 @@ export default function CoursePlayer() {
             </TabsContent>
             <TabsContent value="recursos">
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                  <div className="flex items-center gap-2"><FileText className="h-4 w-4 text-primary" /><span className="text-sm">Guía de referencia.pdf</span></div>
-                  <Button size="sm" variant="outline">Descargar</Button>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                  <div className="flex items-center gap-2"><FileText className="h-4 w-4 text-primary" /><span className="text-sm">Template de prompts.xlsx</span></div>
-                  <Button size="sm" variant="outline">Descargar</Button>
-                </div>
+                {currentLesson.resources && currentLesson.resources.length > 0 ? (
+                  currentLesson.resources.map((res: any) => (
+                    <div key={res.id || res.name} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <FileText className="h-4 w-4 text-primary" />
+                        <span className="text-sm font-medium">{res.name}</span>
+                      </div>
+                      <a href={res.url} target="_blank" rel="noopener noreferrer">
+                        <Button size="sm" variant="outline">Descargar</Button>
+                      </a>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-6 text-muted-foreground text-sm">
+                    No hay recursos adicionales para esta lección.
+                  </div>
+                )}
               </div>
             </TabsContent>
             <TabsContent value="notas">
@@ -200,9 +209,11 @@ export default function CoursePlayer() {
             <Button
               onClick={handleMarkComplete}
               className="w-full gradient-hero text-primary-foreground border-0"
-              disabled={completed.includes(currentLesson.id) || isUpdating}
+              disabled={!user || completed.includes(currentLesson.id) || isUpdating}
             >
-              {completed.includes(currentLesson.id) ? "✓ Completada" : (isUpdating ? "Guardando..." : "Marcar como Completada")}
+              {!user 
+                ? "Regístrate para guardar progreso" 
+                : (completed.includes(currentLesson.id) ? "✓ Completada" : (isUpdating ? "Guardando..." : "Marcar como Completada"))}
             </Button>
             <div className="flex gap-2">
               {prevLesson && <Link to={`/learn/${course.id}/${prevLesson.id}`} className="flex-1"><Button variant="outline" className="w-full text-xs"><ChevronLeft className="h-3 w-3 mr-1" />Anterior</Button></Link>}

@@ -16,15 +16,34 @@ export function useAuth() {
     useEffect(() => {
         // Consultar el perfil a DB sabiendo la UUID del User Auth
         const fetchProfile = async (authUserId: string) => {
-            const { data, error } = await supabase
+            let { data, error } = await supabase
                 .from('profiles')
                 .select('*')
                 .eq('id', authUserId)
                 .single();
 
             if (error || !data) {
-                console.error("Error fetching profile:", error);
-                return null;
+                console.warn("Perfil no encontrado en la base de datos, autocurando perfil sobre la marcha...");
+                // Crear el perfil desde el cliente si el trigger falló o el registro quedó huérfano
+                const { data: newProfile, error: createError } = await supabase
+                    .from('profiles')
+                    .insert({
+                        id: authUserId,
+                        name: "Estudiante de Prueba",
+                        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + authUserId,
+                        plan: 'free',
+                        points: 0,
+                        streak: 0,
+                        position: 999
+                    })
+                    .select()
+                    .single();
+
+                if (createError) {
+                    console.error("Error crítico al autocurar el perfil:", createError);
+                    return null;
+                }
+                data = newProfile;
             }
 
             // Cargar inscripciones reales (enrolled_courses)
@@ -143,6 +162,7 @@ export function useAuth() {
             });
 
             if (error) throw error;
+            setState((prev) => ({ ...prev, isLoading: false }));
             return true;
         } catch (error: any) {
             setState((prev) => ({

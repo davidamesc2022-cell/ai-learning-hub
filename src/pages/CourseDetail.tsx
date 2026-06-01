@@ -157,16 +157,35 @@ export default function CourseDetail() {
                           <AccordionTrigger className="text-sm font-semibold hover:no-underline">{mod.title}</AccordionTrigger>
                           <AccordionContent>
                             <div className="space-y-2 pb-2">
-                              {(mod.lessons || []).map((lesson) => (
-                                <div key={lesson.id} className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-muted/50 transition-colors">
-                                  <div className="flex items-center gap-3">
-                                    {lesson.isFree ? <Play className="h-4 w-4 text-primary" /> : <Lock className="h-4 w-4 text-muted-foreground" />}
-                                    <span className="text-sm">{lesson.title}</span>
-                                    {lesson.isFree && <Badge variant="outline" className="text-[10px] px-1.5 py-0">Preview</Badge>}
+                              {(mod.lessons || []).map((lesson) => {
+                                const canPlay = lesson.isFree || (user && isEnrolledIn(course.id));
+                                return (
+                                  <div 
+                                    key={lesson.id} 
+                                    onClick={async () => {
+                                      if (!canPlay) return;
+                                      if (!user) {
+                                        navigate("/auth");
+                                        return;
+                                      }
+                                      if (!isEnrolledIn(course.id)) {
+                                        setIsEnrolling(true);
+                                        await enrollInCourse(course.id);
+                                        setIsEnrolling(false);
+                                      }
+                                      navigate(`/learn/${course.id}/${lesson.id}`);
+                                    }}
+                                    className={`flex items-center justify-between py-2 px-3 rounded-lg transition-colors ${canPlay ? "cursor-pointer hover:bg-muted/55 text-foreground" : "text-muted-foreground"}`}
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      {lesson.isFree ? <Play className="h-4 w-4 text-primary fill-primary/10" /> : <Lock className="h-4 w-4 text-muted-foreground" />}
+                                      <span className="text-sm font-medium">{lesson.title}</span>
+                                      {lesson.isFree && <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-primary/5 text-primary border-primary/20">Preview</Badge>}
+                                    </div>
+                                    <span className="text-xs text-muted-foreground">{lesson.duration || "10 min"}</span>
                                   </div>
-                                  <span className="text-xs text-muted-foreground">{lesson.duration || "10 min"}</span>
-                                </div>
-                              ))}
+                                );
+                              })}
                             </div>
                           </AccordionContent>
                         </AccordionItem>

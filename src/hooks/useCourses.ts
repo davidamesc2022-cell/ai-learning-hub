@@ -85,7 +85,8 @@ export function useCourses(initialFilters?: Partial<CourseFilters>) {
                                     title: l.title,
                                     duration: l.duration,
                                     isFree: l.is_free,
-                                    videoUrl: l.video_url
+                                    videoUrl: l.video_url,
+                                    resources: l.resources || []
                                 }))
                         }))
                 }));

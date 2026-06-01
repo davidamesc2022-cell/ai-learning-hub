@@ -55,8 +55,9 @@ function GoogleIcon() {
 function LoginFormComponent() {
   const [showPass, setShowPass] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const { login, loginWithGoogle, isLoading, error } = useAuth();
+  const { login, loginWithGoogle, error } = useAuth();
 
   const {
     register,
@@ -66,7 +67,9 @@ function LoginFormComponent() {
   } = useForm<LoginForm>({ resolver: zodResolver(loginSchema) });
 
   const onSubmit = async (data: LoginForm) => {
+    setIsSubmitting(true);
     const ok = await login({ email: data.email, password: data.password });
+    setIsSubmitting(false);
     if (ok) {
       setSuccess(true);
       setTimeout(() => navigate("/dashboard"), 800);
@@ -154,9 +157,9 @@ function LoginFormComponent() {
         type="submit"
         className="w-full gradient-hero text-primary-foreground border-0"
         size="lg"
-        disabled={isLoading || success}
+        disabled={isSubmitting || success}
       >
-        {isLoading ? (
+        {isSubmitting ? (
           <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Iniciando sesión...</>
         ) : (
           "Iniciar Sesión"
@@ -184,10 +187,11 @@ function LoginFormComponent() {
 function RegisterFormComponent() {
   const [showPass, setShowPass] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [registeredName, setRegisteredName] = useState("");
   const navigate = useNavigate();
-  const { register: registerUser, loginWithGoogle, isLoading, error } = useAuth();
+  const { register: registerUser, loginWithGoogle, error } = useAuth();
 
   const {
     register,
@@ -209,12 +213,14 @@ function RegisterFormComponent() {
   const strengthColor = ['bg-destructive', 'bg-warning', 'bg-success'][strengthScore - 1] || 'bg-muted';
 
   const onSubmit = async (data: RegisterForm) => {
+    setIsSubmitting(true);
     const ok = await registerUser({
       name: data.name,
       email: data.email,
       password: data.password,
       confirmPassword: data.confirmPassword,
     });
+    setIsSubmitting(false);
     if (ok) {
       setSuccess(true);
       setRegisteredName(data.name);
@@ -346,9 +352,9 @@ function RegisterFormComponent() {
         type="submit"
         className="w-full gradient-hero text-primary-foreground border-0"
         size="lg"
-        disabled={isLoading || success}
+        disabled={isSubmitting || success}
       >
-        {isLoading ? (
+        {isSubmitting ? (
           <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Creando cuenta...</>
         ) : (
           "Crear Cuenta Gratis"
