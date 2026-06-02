@@ -16,7 +16,7 @@ export default function CoursePlayer() {
   const { courseId, lessonId } = useParams();
   const navigate = useNavigate();
   const { getCourseById, isLoading } = useCourses();
-  const { getCompletedLessons, completeLesson } = useAuth();
+  const { user, getCompletedLessons, completeLesson } = useAuth();
   
   const course = courseId ? getCourseById(courseId) : undefined;
   
