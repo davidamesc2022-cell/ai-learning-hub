@@ -80,6 +80,7 @@ create table public.lessons (
   is_free boolean default false,
   video_url text,
   description text,
+  resources jsonb default '[]'::jsonb,
   order_index integer default 0
 );
 alter table public.lessons enable row level security;
