@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { Search, Plus, MessageSquare, ArrowUp, CheckCircle, TrendingUp, Clock, Flame, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -407,7 +408,9 @@ export default function Community() {
         ) : (
           <div className="space-y-3">
             {filtered.map((thread) => (
-              <ThreadCard key={thread.id} thread={thread} onUpvote={handleUpvote} />
+              <Link key={thread.id} to={`/community/thread/${thread.id}`} className="block">
+                <ThreadCard thread={thread} onUpvote={handleUpvote} />
+              </Link>
             ))}
 
             {filtered.length === 0 && (
