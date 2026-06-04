@@ -1,11 +1,29 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, createContext, useContext, ReactNode } from "react";
 import type { User, AuthState, LoginCredentials, RegisterCredentials } from "@/lib/types";
 import { supabase } from "@/lib/supabase";
 
-// ─────────────────────────────────────────────────────────────
-// useAuth — Hook centralizado de autenticación conectado a Supabase
-// ─────────────────────────────────────────────────────────────
-export function useAuth() {
+interface AuthContextType {
+    user: User | null;
+    isAuthenticated: boolean;
+    isLoading: boolean;
+    error: string | null;
+    login: (credentials: LoginCredentials) => Promise<boolean>;
+    loginWithGoogle: () => Promise<boolean>;
+    register: (data: RegisterCredentials) => Promise<boolean>;
+    logout: () => Promise<void>;
+    clearError: () => void;
+    isEnrolledIn: (courseId: string) => boolean;
+    getCourseProgress: (courseId: string) => number;
+    enrollInCourse: (courseId: string) => Promise<boolean>;
+    getCompletedLessons: (lessonIds: string[]) => Promise<string[]>;
+    completeLesson: (courseId: string, lessonId: string, completedLessonIds: string[], totalCourseLessons: number) => Promise<boolean>;
+    updateProfile: (fields: { name?: string; bio?: string }) => Promise<boolean>;
+    fetchBadges: () => Promise<any[]>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
     const [state, setState] = useState<AuthState>({
         user: null,
         isAuthenticated: false,
@@ -218,7 +236,7 @@ export function useAuth() {
                 return false;
             }
             
-            // Actialización Optimista UI
+            // Actualización Optimista UI
             setState(prev => {
                 if (!prev.user) return prev;
                 if (prev.user.enrolledCourses.some(e => e.courseId === courseId)) return prev;
@@ -374,22 +392,34 @@ export function useAuth() {
         }
     }, [state.user]);
 
-    return {
-        user: state.user,
-        isAuthenticated: state.isAuthenticated,
-        isLoading: state.isLoading,
-        error: state.error,
-        login,
-        loginWithGoogle,
-        register,
-        logout,
-        clearError,
-        isEnrolledIn,
-        getCourseProgress,
-        enrollInCourse,
-        getCompletedLessons,
-        completeLesson,
-        updateProfile,
-        fetchBadges,
-    };
+    return (
+        <AuthContext.Provider value={{
+            user: state.user,
+            isAuthenticated: state.isAuthenticated,
+            isLoading: state.isLoading,
+            error: state.error,
+            login,
+            loginWithGoogle,
+            register,
+            logout,
+            clearError,
+            isEnrolledIn,
+            getCourseProgress,
+            enrollInCourse,
+            getCompletedLessons,
+            completeLesson,
+            updateProfile,
+            fetchBadges,
+        }}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+export function useAuth() {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+        throw new Error("useAuth must be used within an AuthProvider");
+    }
+    return context;
 }
