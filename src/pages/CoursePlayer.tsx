@@ -124,7 +124,38 @@ export default function CoursePlayer() {
               <TabsTrigger value="comentarios"><MessageSquare className="h-3.5 w-3.5 mr-1.5" />Comentarios</TabsTrigger>
             </TabsList>
             <TabsContent value="descripcion">
-              <p className="text-sm text-muted-foreground">En esta lección aprenderás los conceptos fundamentales necesarios para aplicar IA en tu trabajo diario. Cubriremos las bases teóricas y veremos ejemplos prácticos que podrás replicar inmediatamente.</p>
+              <div className="space-y-4 text-sm text-muted-foreground whitespace-pre-wrap">
+                <p>
+                  {currentLesson.description || "En esta lección aprenderás los conceptos fundamentales necesarios para aplicar IA en tu trabajo diario. Cubriremos las bases teóricas y veremos ejemplos prácticos que podrás replicar inmediatamente."}
+                </p>
+                {currentLesson.title.toLowerCase().includes("imágenes") && (
+                  <div className="bg-primary/5 rounded-xl border border-primary/10 p-4 mt-2">
+                    <h4 className="font-bold text-foreground text-xs uppercase tracking-wider mb-2">🎯 ¿Qué lograrás en esta clase?</h4>
+                    <p className="text-xs mb-3 text-muted-foreground/90">
+                      Aprenderás a generar contenido visual de alta calidad y anuncios en video enfocados a la venta y el marketing digital de tu negocio, ahorrando tiempo y presupuesto en producción.
+                    </p>
+                    <h4 className="font-bold text-foreground text-xs uppercase tracking-wider mb-2">🛠️ Herramientas clave que aprenderás:</h4>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                      <li className="flex items-start gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                        <span><strong>Google Imagen (Nano Banana):</strong> Creación y refinamiento de imágenes.</span>
+                      </li>
+                      <li className="flex items-start gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                        <span><strong>ChatGPT:</strong> Redacción y estructuración de prompts eficaces.</span>
+                      </li>
+                      <li className="flex items-start gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                        <span><strong>Flow:</strong> Animación de imágenes y generación de video.</span>
+                      </li>
+                      <li className="flex items-start gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                        <span><strong>Sidance 2.0:</strong> Creación de piezas de video dinámicas y profesionales.</span>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
             </TabsContent>
             <TabsContent value="recursos">
               <div className="space-y-3">

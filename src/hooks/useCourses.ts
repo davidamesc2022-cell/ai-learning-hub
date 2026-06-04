@@ -86,6 +86,7 @@ export function useCourses(initialFilters?: Partial<CourseFilters>) {
                                     duration: l.duration,
                                     isFree: l.is_free,
                                     videoUrl: l.video_url,
+                                    description: l.description,
                                     resources: l.resources || []
                                 }))
                         }))
