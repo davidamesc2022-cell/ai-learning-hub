@@ -157,7 +157,7 @@ export default function CoursePlayer() {
                   <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold flex-shrink-0">CR</div>
                   <div>
                     <p className="text-sm font-medium">Carlos Ramírez <span className="text-xs text-muted-foreground ml-2">Hace 3 días</span></p>
-                    <p className="text-sm text-muted-foreground">Excelente explicación, muy claro todo. ¿Podrías profundizar más en el tema de automatización?</p>
+                    <p className="text-sm text-muted-foreground">Excelente explicación sobre Midjourney y Runway, me sirvió muchísimo para crear mi primer comercial con inteligencia artificial. ¿Podrías profundizar más en cómo lograr consistencia en los rostros de los personajes en diferentes tomas?</p>
                   </div>
                 </div>
                 <Textarea placeholder="Escribe un comentario..." className="min-h-[80px]" />

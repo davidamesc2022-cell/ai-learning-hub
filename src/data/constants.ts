@@ -54,23 +54,23 @@ export const plans: PricingPlan[] = [
 export const testimonials: Testimonial[] = [
   {
     name: "Carlos Ramírez",
-    title: "Director de Marketing en TechCorp",
-    avatar: "",
-    quote: "Gracias a los cursos de David, implementé IA en mi equipo de marketing y triplicamos nuestra productividad en solo 2 meses.",
+    title: "Dueño de E-commerce y Emprendedor",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120&h=120",
+    quote: "Gracias a las estrategias de IA de David, logramos automatizar el contenido de nuestras redes y el soporte de nuestra tienda online. Nuestras ventas subieron un 40% en 2 meses.",
     rating: 5,
   },
   {
     name: "Ana Martínez",
-    title: "Fundadora de StartupIA",
-    avatar: "",
-    quote: "El curso de Prompt Engineering cambió completamente mi forma de trabajar con IA. Ahora soy 10x más productiva.",
+    title: "Propietaria de Agencia Creativa y Fundadora",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120&h=120",
+    quote: "El curso práctico de inteligencia artificial me permitió optimizar la creación de propuestas y piezas gráficas para mis clientes. Hacemos en horas lo que antes nos tomaba días.",
     rating: 5,
   },
   {
     name: "Roberto Silva",
-    title: "Freelancer & Consultor Digital",
-    avatar: "",
-    quote: "De no saber nada de IA a automatizar todo mi negocio. Los cursos son increíblemente prácticos y bien estructurados.",
+    title: "Consultor de Negocios y Fundador Pyme",
+    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=120&h=120",
+    quote: "Tenía miedo de que la IA fuera compleja, pero David la enseña de forma muy práctica. Logré implementar flujos automáticos en mi negocio y reduje costos operativos.",
     rating: 5,
   },
 ];

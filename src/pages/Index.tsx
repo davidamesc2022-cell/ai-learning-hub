@@ -168,8 +168,8 @@ export default function Index() {
               </div>
               <p className="text-sm mb-4 italic">&ldquo;{t.quote}&rdquo;</p>
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary text-sm font-bold overflow-hidden border border-primary/20">
-                  <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=random`} alt={t.name} className="w-full h-full object-cover" />
+                <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary text-sm font-bold overflow-hidden border border-primary/20 shrink-0">
+                  <img src={t.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=random`} alt={t.name} className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <p className="font-semibold text-sm">{t.name}</p>
