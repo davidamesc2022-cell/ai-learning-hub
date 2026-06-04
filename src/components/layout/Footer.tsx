@@ -57,8 +57,8 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-3 text-white">Comunidad</h4>
             <div className="space-y-2 text-sm">
-              <Link to="/community" className="block text-slate-400 hover:text-primary transition-colors">Foro General</Link>
-              <Link to="/community" className="block text-slate-400 hover:text-primary transition-colors">Anuncios Oficiales</Link>
+              <Link to="/community?category=Todo" className="block text-slate-400 hover:text-primary transition-colors">Foro General</Link>
+              <Link to="/community?category=Anuncios" className="block text-slate-400 hover:text-primary transition-colors">Anuncios Oficiales</Link>
             </div>
           </div>
           <div>
@@ -66,7 +66,7 @@ export default function Footer() {
             <div className="space-y-2 text-sm">
               <Link to="/pricing" className="block text-slate-400 hover:text-primary transition-colors">Preguntas Frecuentes</Link>
               <a
-                href="https://wa.me/51996005543?text=Hola%20David%2C%20necesito%20soporte%20con%20la%20academia."
+                href="https://wa.me/51913321222?text=Hola%20David%2C%20necesito%20soporte%20con%20la%20academia."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block text-slate-400 hover:text-primary transition-colors"

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Search, Plus, MessageSquare, ArrowUp, CheckCircle, TrendingUp, Clock, Flame, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -233,6 +233,8 @@ function NewThreadDialog({
 // ── Página principal ──────────────────────────────────────────
 export default function Community() {
   const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const categoryParam = searchParams.get("category");
   
   // Correos con permisos de administrador (Corporativo y Respaldo)
   const ADMIN_EMAILS = ["hablemos@davidamesc.com", "davidamesc2022@gmail.com"]; 
@@ -240,6 +242,19 @@ export default function Community() {
 
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState("Todo");
+
+  // Sincronizar pestaña activa con el parámetro 'category' en la URL
+  useEffect(() => {
+    if (categoryParam) {
+      const found = CATEGORIES.find(
+        (c) => c.toLowerCase() === categoryParam.toLowerCase()
+      );
+      if (found) {
+        setActiveTab(found);
+      }
+    }
+  }, [categoryParam]);
+
   const [sort, setSort] = useState("reciente");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [threads, setThreads] = useState<Thread[]>([]);
