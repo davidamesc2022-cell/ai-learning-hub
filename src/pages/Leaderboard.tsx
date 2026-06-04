@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/lib/supabase";
+import { supabase, publicSupabase } from "@/lib/supabase";
 import { User } from "@/lib/types";
 
 const periods = ["Este mes", "Este año", "Histórico"];
@@ -34,7 +34,7 @@ export default function Leaderboard() {
     const fetchLeaderboard = async () => {
       setIsLoading(true);
       try {
-        const { data, error } = await supabase
+        const { data, error } = await publicSupabase
           .from("profiles")
           .select("*, enrolled_courses(count)")
           .order("points", { ascending: false })
