@@ -22,23 +22,34 @@ const STUDENT_HUBS = [
 ];
 
 const PERU_DEPARTMENTS = [
-  { name: "Lima & Callao", students: 485, region: "Centro" },
-  { name: "Arequipa", students: 78, region: "Sur" },
-  { name: "La Libertad", students: 62, region: "Norte" },
-  { name: "Piura", students: 48, region: "Norte" },
-  { name: "Cusco", students: 38, region: "Sur" },
-  { name: "Lambayeque", students: 30, region: "Norte" },
-  { name: "Junín", students: 26, region: "Centro" },
-  { name: "Áncash", students: 22, region: "Norte" },
-  { name: "Ica", students: 18, region: "Sur" },
-  { name: "Cajamarca", students: 15, region: "Norte" },
-  { name: "Loreto", students: 12, region: "Oriente" },
-  { name: "Puno", students: 10, region: "Sur" },
-  { name: "San Martín", students: 8, region: "Oriente" },
-  { name: "Huánuco", students: 7, region: "Centro" },
-  { name: "Tacna", students: 6, region: "Sur" },
+  { name: "Lima & Callao", students: 485, region: "Centro", coords: [-77.04, -12.04] as [number, number] },
+  { name: "Arequipa", students: 78, region: "Sur", coords: [-71.54, -16.40] as [number, number] },
+  { name: "La Libertad", students: 62, region: "Norte", coords: [-79.02, -8.11] as [number, number] },
+  { name: "Piura", students: 48, region: "Norte", coords: [-80.63, -5.19] as [number, number] },
+  { name: "Cusco", students: 38, region: "Sur", coords: [-71.97, -13.52] as [number, number] },
+  { name: "Lambayeque", students: 30, region: "Norte", coords: [-79.84, -6.77] as [number, number] },
+  { name: "Junín", students: 26, region: "Centro", coords: [-75.21, -12.06] as [number, number] },
+  { name: "Áncash", students: 22, region: "Norte", coords: [-77.53, -9.53] as [number, number] },
+  { name: "Ica", students: 18, region: "Sur", coords: [-75.73, -14.07] as [number, number] },
+  { name: "Cajamarca", students: 15, region: "Norte", coords: [-78.52, -7.16] as [number, number] },
+  { name: "Loreto", students: 12, region: "Oriente", coords: [-73.25, -3.75] as [number, number] },
+  { name: "Puno", students: 10, region: "Sur", coords: [-70.02, -15.84] as [number, number] },
+  { name: "San Martín", students: 8, region: "Oriente", coords: [-76.37, -6.49] as [number, number] },
+  { name: "Huánuco", students: 7, region: "Centro", coords: [-76.24, -9.93] as [number, number] },
+  { name: "Tacna", students: 6, region: "Sur", coords: [-70.25, -18.01] as [number, number] },
   { name: "Otros Departamentos", students: 12, region: "Nacional" }
 ];
+
+const getDeptData = (nombdep: string) => {
+  if (nombdep === "LIMA" || nombdep === "CALLAO") {
+    return PERU_DEPARTMENTS.find(d => d.name === "Lima & Callao");
+  }
+  const normNombdep = nombdep.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+  return PERU_DEPARTMENTS.find(d => {
+    const normName = d.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    return normName === normNombdep;
+  });
+};
 
 const totalStudents = STUDENT_HUBS.reduce((a, b) => a + b.students, 0);
 
@@ -52,7 +63,7 @@ function getRadius(students: number) {
 
 export default function StudentWorldMap() {
   const [view, setView] = useState<"global" | "peru">("global");
-  const [tooltip, setTooltip] = useState<{ country: string; students: number; flag: string } | null>(null);
+  const [tooltip, setTooltip] = useState<{ title: string; students: number; flag: string } | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
   return (
@@ -125,7 +136,7 @@ export default function StudentWorldMap() {
                     key={hub.country}
                     coordinates={hub.coords}
                     onMouseEnter={(e) => {
-                      setTooltip({ country: hub.country, students: hub.students, flag: hub.flag });
+                      setTooltip({ title: hub.country, students: hub.students, flag: hub.flag });
                       setTooltipPos({ x: (e as any).clientX, y: (e as any).clientY });
                     }}
                     onMouseLeave={() => setTooltip(null)}
@@ -152,97 +163,91 @@ export default function StudentWorldMap() {
               </ZoomableGroup>
             </ComposableMap>
 
-            {/* Tooltip flotante */}
-            {tooltip && (
-              <div
-                className="fixed z-50 bg-slate-900/90 border border-slate-700 text-white rounded-xl px-4 py-2 shadow-2xl text-xs pointer-events-none backdrop-blur-md"
-                style={{ left: tooltipPos.x + 12, top: tooltipPos.y - 40 }}
-              >
-                <span className="font-bold">{tooltip.flag} {tooltip.country}</span>
-                <br />
-                <span className="text-cyan-400 font-semibold">{tooltip.students} estudiantes</span>
-              </div>
-            )}
           </div>
         ) : (
           <div className="grid md:grid-cols-[1fr_1.3fr] gap-8 bg-slate-900/40 rounded-3xl border border-slate-800 p-6 md:p-8 shadow-2xl animate-fade-in">
-            {/* LADO IZQUIERDO: Mapa Geométrico / Red de Nodos de Perú */}
-            <div className="flex flex-col items-center justify-center bg-slate-950/40 rounded-2xl border border-slate-800/80 p-6 relative min-h-[400px]">
-              <div className="absolute top-4 left-4">
+            {/* LADO IZQUIERDO: Mapa Geográfico Departamental de Perú */}
+            <div className="flex flex-col items-center justify-center bg-slate-950/40 rounded-2xl border border-slate-800/80 p-6 relative min-h-[400px] overflow-hidden">
+              <div className="absolute top-4 left-4 z-10">
                 <span className="text-[9px] uppercase font-black tracking-widest text-slate-500">Red Nacional de Aprendizaje</span>
                 <h3 className="font-extrabold text-sm text-cyan-400">Nodos de Alumnos</h3>
               </div>
 
-              {/* Red interactiva futurista simulando la geografía de Perú */}
-              <svg viewBox="0 0 200 350" className="w-full max-w-[210px] h-auto drop-shadow-[0_0_15px_rgba(6,182,212,0.15)] mt-4">
-                {/* Líneas de conexión */}
-                <line x1="30" y1="20" x2="60" y2="40" stroke="rgba(6,182,212,0.2)" strokeWidth="1" />
-                <line x1="60" y1="40" x2="80" y2="80" stroke="rgba(6,182,212,0.2)" strokeWidth="1" />
-                <line x1="80" y1="80" x2="90" y2="130" stroke="rgba(6,182,212,0.2)" strokeWidth="1" />
-                <line x1="90" y1="130" x2="100" y2="180" stroke="rgba(6,182,212,0.2)" strokeWidth="1" />
-                <line x1="100" y1="180" x2="85" y2="240" stroke="rgba(6,182,212,0.2)" strokeWidth="1" />
-                <line x1="85" y1="240" x2="110" y2="280" stroke="rgba(6,182,212,0.2)" strokeWidth="1" />
-                <line x1="110" y1="280" x2="160" y2="330" stroke="rgba(6,182,212,0.2)" strokeWidth="1" />
+              <div className="w-full h-full flex items-center justify-center mt-4 relative">
+                <ComposableMap
+                  projection="geoMercator"
+                  projectionConfig={{
+                    scale: 2100,
+                    center: [-74.5, -9.3]
+                  }}
+                  style={{ width: "100%", height: "auto", maxHeight: "380px" }}
+                >
+                  <ZoomableGroup zoom={1} minZoom={1} maxZoom={1}>
+                    <Geographies geography="https://raw.githubusercontent.com/juaneladio/peru-geojson/master/peru_departamental_simple.geojson">
+                      {({ geographies }) =>
+                        geographies.map((geo) => {
+                          const deptData = getDeptData(geo.properties.NOMBDEP);
+                          const hasStudents = deptData && deptData.students > 0;
+                          return (
+                            <Geography
+                              key={geo.rsmKey}
+                              geography={geo}
+                              fill={hasStudents ? "#1e293b" : "#0f172a"}
+                              stroke="#334155"
+                              strokeWidth={0.5}
+                              style={{
+                                default: { outline: "none" },
+                                hover: { fill: "#1e3a5f", outline: "none" },
+                                pressed: { outline: "none" },
+                              }}
+                            />
+                          );
+                        })
+                      }
+                    </Geographies>
 
-                {/* Líneas interiores/transversales */}
-                <line x1="80" y1="80" x2="150" y2="120" stroke="rgba(6,182,212,0.1)" strokeWidth="0.8" strokeDasharray="3 3" />
-                <line x1="90" y1="130" x2="130" y2="210" stroke="rgba(6,182,212,0.1)" strokeWidth="0.8" strokeDasharray="3 3" />
-                <line x1="100" y1="180" x2="155" y2="250" stroke="rgba(6,182,212,0.1)" strokeWidth="0.8" strokeDasharray="3 3" />
-                <line x1="85" y1="240" x2="140" y2="310" stroke="rgba(6,182,212,0.1)" strokeWidth="0.8" strokeDasharray="3 3" />
+                    {PERU_DEPARTMENTS.filter((d) => d.coords).map((dept) => (
+                      <Marker
+                        key={dept.name}
+                        coordinates={dept.coords as [number, number]}
+                        onMouseEnter={(e) => {
+                          setTooltip({ title: dept.name, students: dept.students, flag: "🇵🇪" });
+                          setTooltipPos({ x: (e as any).clientX, y: (e as any).clientY });
+                        }}
+                        onMouseLeave={() => setTooltip(null)}
+                      >
+                        {/* Anillo pulsante */}
+                        {dept.students > 20 && (
+                          <circle
+                            r={getRadius(dept.students) + 3}
+                            fill={dept.name === "Lima & Callao" ? "rgba(250,204,21,0.15)" : "rgba(6,182,212,0.12)"}
+                            stroke={dept.name === "Lima & Callao" ? "rgba(250,204,21,0.3)" : "rgba(6,182,212,0.3)"}
+                            strokeWidth={1}
+                            className="animate-ping"
+                            style={{ animationDuration: "2s" }}
+                          />
+                        )}
+                        {/* Punto principal */}
+                        <circle
+                          r={getRadius(dept.students) * 0.7}
+                          fill={dept.name === "Lima & Callao" ? "#facc15" : "#06b6d4"}
+                          stroke="white"
+                          strokeWidth={1}
+                          style={{
+                            cursor: "pointer",
+                            filter: dept.name === "Lima & Callao"
+                              ? "drop-shadow(0 0 6px rgba(250,204,21,0.8))"
+                              : "drop-shadow(0 0 6px rgba(6,182,212,0.7))"
+                          }}
+                        />
+                      </Marker>
+                    ))}
+                  </ZoomableGroup>
+                </ComposableMap>
+              </div>
 
-                {/* Nodos (Ciudades) */}
-                {/* Tumbes */}
-                <circle cx="30" cy="20" r="3" fill="#06b6d4" className="animate-pulse" />
-                
-                {/* Piura */}
-                <circle cx="45" cy="35" r="4" fill="#06b6d4" />
-                
-                {/* Chiclayo */}
-                <circle cx="60" cy="55" r="4" fill="#06b6d4" />
-                
-                {/* Trujillo */}
-                <circle cx="80" cy="80" r="5" fill="#06b6d4" />
-                <circle cx="80" cy="80" r="9" stroke="#06b6d4" strokeWidth="0.5" fill="none" className="animate-ping" style={{ animationDuration: '2.5s' }} />
-                
-                {/* Chimbote */}
-                <circle cx="85" cy="105" r="4" fill="#06b6d4" />
-
-                {/* Iquitos */}
-                <circle cx="150" cy="80" r="4.5" fill="#3b82f6" />
-                <line x1="80" y1="80" x2="150" y2="80" stroke="rgba(59,130,246,0.15)" strokeWidth="0.8" />
-
-                {/* Tarapoto */}
-                <circle cx="120" cy="110" r="4" fill="#3b82f6" />
-
-                {/* Lima - Nodo Central */}
-                <circle cx="100" cy="180" r="8" fill="#facc15" />
-                <circle cx="100" cy="180" r="16" stroke="#facc15" strokeWidth="0.5" fill="none" className="animate-ping" style={{ animationDuration: '2s' }} />
-
-                {/* Huancayo */}
-                <circle cx="120" cy="190" r="4" fill="#06b6d4" />
-
-                {/* Arequipa */}
-                <circle cx="140" cy="280" r="5.5" fill="#06b6d4" />
-                <circle cx="140" cy="280" r="11" stroke="#06b6d4" strokeWidth="0.5" fill="none" className="animate-ping" style={{ animationDuration: '2.8s' }} />
-
-                {/* Cusco */}
-                <circle cx="155" cy="245" r="5" fill="#06b6d4" />
-                
-                {/* Puno */}
-                <circle cx="175" cy="275" r="4" fill="#06b6d4" />
-
-                {/* Tacna */}
-                <circle cx="160" cy="330" r="3.5" fill="#06b6d4" />
-
-                {/* Etiquetas de texto */}
-                <text x="38" y="15" fill="#94a3b8" fontSize="7" fontFamily="sans-serif">Norte (Trujillo/Piura)</text>
-                <text x="160" y="83" fill="#94a3b8" fontSize="7" fontFamily="sans-serif">Oriente (Iquitos)</text>
-                <text x="112" y="176" fill="#facc15" fontSize="8" fontWeight="bold" fontFamily="sans-serif">Lima ({PERU_DEPARTMENTS[0].students})</text>
-                <text x="75" y="295" fill="#94a3b8" fontSize="7" fontFamily="sans-serif">Sur (Arequipa/Cusco)</text>
-              </svg>
-
-              <p className="text-[10px] text-slate-500 text-center mt-6 max-w-[190px]">
-                Estructura de red enlazada a las principales capitales de departamento de nuestro medio.
+              <p className="text-[10px] text-slate-500 text-center mt-4 max-w-[190px]">
+                Mapa departamental interactivo con la distribución real de nuestros alumnos.
               </p>
             </div>
 
@@ -308,6 +313,18 @@ export default function StudentWorldMap() {
             </div>
           </div>
         </div>
+
+        {/* Tooltip flotante compartido */}
+        {tooltip && (
+          <div
+            className="fixed z-50 bg-slate-900/90 border border-slate-700 text-white rounded-xl px-4 py-2 shadow-2xl text-xs pointer-events-none backdrop-blur-md"
+            style={{ left: tooltipPos.x + 12, top: tooltipPos.y - 40 }}
+          >
+            <span className="font-bold">{tooltip.flag} {tooltip.title}</span>
+            <br />
+            <span className="text-cyan-400 font-semibold">{tooltip.students} estudiantes</span>
+          </div>
+        )}
       </div>
     </section>
   );

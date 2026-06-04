@@ -6,7 +6,7 @@ import davidPhoto from "@/assets/david-ames.png";
 const CREDENTIALS = [
   {
     icon: Users,
-    value: "2,847+",
+    value: "959+",
     label: "Estudiantes formados",
     color: "text-cyan-400",
     bg: "bg-cyan-400/10",
@@ -126,7 +126,7 @@ export default function InstructorSection() {
                 pueda dominar las herramientas de IA que están redefiniendo el mercado laboral y empresarial.
               </p>
               <p>
-                He ayudado a más de <strong className="text-white">2,800 profesionales</strong> de Latinoamérica 
+                He ayudado a más de <strong className="text-white">950 profesionales</strong> de Latinoamérica 
                 y España a transformar su forma de trabajar, crecer en sus carreras y escalar sus negocios 
                 usando IA como ventaja competitiva real.
               </p>
