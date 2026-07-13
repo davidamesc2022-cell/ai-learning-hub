@@ -1,50 +1,37 @@
 -- ==========================================
--- David Ames Academy - Seed Data
+-- Migración: Reemplazo de Estructura Método 4C IA
 -- Ejecuta este script en el SQL Editor de Supabase
--- para insertar los cursos de prueba
 -- ==========================================
 
--- Declaración de UUIDs fijos para mantener las relaciones referenciales
--- NOTA: Se usan caracteres hexadecimales válidos (a-f, 0-9)
--- Cursos: c000...
--- Modulos: d000...
--- Lecciones: e000...
+BEGIN;
 
--- CURSO 1: IA para Marketing
-insert into public.courses (id, title, description, long_description, category, category_label, level, price, is_free, rating, students, instructor, duration, lessons_count, thumbnail, is_popular, what_you_learn, requirements, for_who) values
-('c0000000-0000-0000-0000-000000000001', 'IA para Marketing en 7 Días', 'Aprenda a integrar inteligencia artificial en su estrategia de marketing digital en solo una semana con casos prácticos.', 'Este curso intensivo te llevará de cero a experto en el uso de herramientas de IA para marketing digital. Aprenderás a crear contenido con ChatGPT, automatizar campañas y analizar datos con IA.', 'marketing', 'Marketing Digital', 'Principiante', 49.99, false, 4.9, 1250, 'David Ames', '4 horas', 12, 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800', true, 
-array['Integrar herramientas de IA en tu estrategia de marketing', 'Crear contenido de alta calidad con ChatGPT', 'Automatizar campañas de email marketing', 'Analizar datos de clientes con IA', 'Optimizar tu presupuesto de marketing con IA'], 
-array['Conocimientos básicos de marketing digital', 'Una cuenta de ChatGPT (gratuita)'], 
-array['Marketers que quieren adoptar IA', 'Emprendedores digitales', 'Community managers']);
+-- 1. Actualizar información del curso principal
+UPDATE public.courses SET
+  title = 'MÉTODO 4C IA',
+  description = 'IA práctica para emprendedores y dueños de negocio.',
+  long_description = 'El Método 4C es un ecosistema educativo diseñado para llevar un emprendimiento desde la definición estratégica hasta el cierre de ventas predecibles, apoyado en inteligencia artificial. De la improvisación a un sistema práctico para entender, construir, comunicar y convertir.',
+  category = 'ia',
+  category_label = 'IA para Profesionales',
+  level = 'Intermedio',
+  price = 49.00,
+  is_free = false,
+  rating = 4.9,
+  students = 856,
+  instructor = 'David Ames',
+  duration = '10 horas',
+  lessons_count = 38,
+  thumbnail = 'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=800',
+  is_new = true,
+  is_popular = true,
+  what_you_learn = array[$$Día 1 (Claridad): Definir el dolor, deseo y propuesta de valor del cliente ideal.$$, $$Día 2 (Creatividad): Diseñar piezas visuales y logotipos profesionales con IA.$$, $$Día 3 (Comunicación): Estructurar guiones virales y producir videos usando IA.$$, $$Día 4 (Conversión): Crear scripts efectivos para cerrar ventas por chats de mensajería.$$],
+  requirements = array[$$Ganas de facturar más usando Inteligencia Artificial.$$, $$Conocimientos básicos de uso de redes sociales.$$, $$No requieres experiencia técnica o de diseño previa.$$],
+  for_who = array[$$Emprendedores que buscan optimizar su tiempo.$$, $$Dueños de negocio y marcas personales.$$, $$Profesionales de marketing y ventas independientes.$$]
+WHERE id = 'c0000000-0000-0000-0000-000000000002';
 
--- Módulos C1
-insert into public.modules (id, course_id, title, order_index) values
-('d0000000-0000-0000-0001-000000000001', 'c0000000-0000-0000-0000-000000000001', 'Día 1: Fundamentos de IA en Marketing', 1),
-('d0000000-0000-0000-0001-000000000002', 'c0000000-0000-0000-0000-000000000001', 'Día 2: Creación de Contenido con ChatGPT', 2),
-('d0000000-0000-0000-0001-000000000003', 'c0000000-0000-0000-0000-000000000001', 'Día 3: Automatización con IA', 3);
+-- 2. Limpiar módulos y lecciones anteriores del curso
+DELETE FROM public.modules WHERE course_id = 'c0000000-0000-0000-0000-000000000002';
 
--- Lecciones C1M1
-insert into public.lessons (id, module_id, title, duration, is_free, video_url, order_index) values
-('e0000000-0000-0000-0001-000000000001', 'd0000000-0000-0000-0001-000000000001', 'Introducción y bienvenida', '10:00', true, 'https://www.youtube.com/watch?v=LXb3EKWsInQ', 1),
-('e0000000-0000-0000-0001-000000000002', 'd0000000-0000-0000-0001-000000000001', '¿Qué es la IA generativa?', '15:30', true, 'https://www.youtube.com/watch?v=ysz5S6PUM-U', 2);
-
--- Lecciones C1M2
-insert into public.lessons (id, module_id, title, duration, is_free, video_url, order_index) values
-('e0000000-0000-0000-0001-000000000003', 'd0000000-0000-0000-0001-000000000002', 'Prompts eficientes para copy', '20:00', false, 'https://www.youtube.com/watch?v=jNQXAC9IVRw', 1),
-('e0000000-0000-0000-0001-000000000004', 'd0000000-0000-0000-0001-000000000002', 'Automatizando blogs y redes sociales', '25:00', false, 'https://www.youtube.com/watch?v=VlPiUkzgjcI', 2);
-
--- Lecciones C1M3
-insert into public.lessons (id, module_id, title, duration, is_free, order_index) values
-('e0000000-0000-0000-0001-000000000006', 'd0000000-0000-0000-0001-000000000003', 'Email marketing automatizado', '20:00', false, 1),
-('e0000000-0000-0000-0001-000000000007', 'd0000000-0000-0000-0001-000000000003', 'Proyecto final: Tu plan de IA', '30:00', false, 2);
-
--- CURSO 2: MÉTODO 4C IA
-insert into public.courses (id, title, description, long_description, category, category_label, level, price, is_free, rating, students, instructor, duration, lessons_count, thumbnail, is_new, is_popular, what_you_learn, requirements, for_who) values
-('c0000000-0000-0000-0000-000000000002', 'MÉTODO 4C IA', 'IA práctica para emprendedores y dueños de negocio.', 'El Método 4C es un ecosistema educativo diseñado para llevar un emprendimiento desde la definición estratégica hasta el cierre de ventas predecibles, apoyado en inteligencia artificial. De la improvisación a un sistema práctico para entender, construir, comunicar y convertir.', 'ia', 'IA para Profesionales', 'Intermedio', 49.00, false, 4.9, 856, 'David Ames', '10 horas', 38, 'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=800', true, true, 
-array['Día 1 (Claridad): Definir el dolor, deseo y propuesta de valor del cliente ideal.', 'Día 2 (Creatividad): Diseñar piezas visuales y logotipos profesionales con IA.', 'Día 3 (Comunicación): Estructurar guiones virales y producir videos usando IA.', 'Día 4 (Conversión): Crear scripts efectivos para cerrar ventas por chats de mensajería.'], 
-array['Ganas de facturar más usando Inteligencia Artificial.', 'Conocimientos básicos de uso de redes sociales.', 'No requieres experiencia técnica o de diseño previa.'], 
-array['Emprendedores que buscan optimizar su tiempo.', 'Dueños de negocio y marcas personales.', 'Profesionales de marketing y ventas independientes.']);
-
+-- 3. Insertar nuevos módulos y lecciones
 -- Módulo: MÓDULO 0: BASES DE IA Y TRABAJO
 INSERT INTO public.modules (id, course_id, title, order_index) VALUES
 ('a5bac610-3c0c-49a5-a237-7c01ca47aafa', 'c0000000-0000-0000-0000-000000000002', 'MÓDULO 0: BASES DE IA Y TRABAJO', 1);
@@ -1097,3 +1084,5 @@ El proyecto final reúne los activos más importantes construidos durante el cur
 ('b929934a-af97-4e4e-a38a-90691081af8f', '234c202b-8863-419f-a7b0-7499209ced15', 'Clase 2 - Plan de Implementación de 30 días', '20:00', false, NULL, 'Clase práctica del Método 4C.', '[]'::jsonb, 2),
 ('fe4790af-820b-4a99-a995-339e5c59f63c', '234c202b-8863-419f-a7b0-7499209ced15', 'Clase 3 - Evaluación Final 4C (Auditoría de madurez del sistema)', '20:00', false, NULL, 'Clase práctica del Método 4C.', '[]'::jsonb, 3),
 ('4e6e93e9-ddf6-41cf-a5bd-145a13b5811b', '234c202b-8863-419f-a7b0-7499209ced15', 'Clase 4 - Conclusiones y Cierre (El ciclo de mejora continua)', '20:00', false, NULL, 'Clase práctica del Método 4C.', '[]'::jsonb, 4);
+
+COMMIT;
