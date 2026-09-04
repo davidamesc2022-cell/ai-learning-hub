@@ -238,6 +238,21 @@ export default function CourseDetail() {
             {/* Sidebar */}
             <aside className="lg:w-80">
               <div className="bg-card rounded-xl border border-border p-6 sticky top-24">
+                {/* Imagen de Portada del Curso */}
+                <div className="aspect-video w-full rounded-lg overflow-hidden mb-6 bg-muted relative border border-border shadow-inner">
+                  {course.thumbnail || course.thumbnailUrl ? (
+                    <img 
+                      src={course.thumbnail || course.thumbnailUrl} 
+                      alt={course.title} 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-5xl bg-gradient-to-br from-primary/20 via-accent/10 to-transparent">
+                      {course.category === "marketing" ? "📊" : "🤖"}
+                    </div>
+                  )}
+                </div>
+
                 {/* El precio principal superior fue eliminado para evitar redundancia con el botón de pago único */}
                 {user && isEnrolledIn(course.id) ? (
                   <Link to={safeModules.length > 0 ? `/learn/${course.id}/${safeModules[0]?.lessons[0]?.id}` : '#'}>

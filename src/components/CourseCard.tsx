@@ -27,8 +27,8 @@ export default function CourseCard({ course }: { course: Course }) {
       <div className="bg-card rounded-xl border border-border overflow-hidden card-hover-accent h-full flex flex-col">
         {/* Thumbnail */}
         <div className="relative h-44 flex items-center justify-center overflow-hidden bg-muted">
-          {course.thumbnailUrl ? (
-             <img src={course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          {course.thumbnail || course.thumbnailUrl ? (
+             <img src={course.thumbnail || course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           ) : (
             <>
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/10 to-transparent" />

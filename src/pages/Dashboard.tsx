@@ -99,8 +99,8 @@ export default function Dashboard() {
                     return (
                       <div key={c.id} className="bg-card rounded-xl border border-border p-5 flex flex-col sm:flex-row items-start gap-4 card-hover">
                         <div className="h-20 w-32 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center flex-shrink-0 text-2xl overflow-hidden border border-border">
-                          {c.thumbnailUrl ? (
-                            <img src={c.thumbnailUrl} alt={c.title} className="w-full h-full object-cover" />
+                          {c.thumbnail || c.thumbnailUrl ? (
+                            <img src={c.thumbnail || c.thumbnailUrl} alt={c.title} className="w-full h-full object-cover" />
                           ) : (
                             c.category === "marketing" ? "📊" : "🤖"
                           )}
