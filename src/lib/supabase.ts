@@ -1,24 +1,18 @@
 import { createClient } from '@supabase/supabase-js';
 
-const DEFAULT_SUPABASE_URL = "https://iufnuzodpsazoepurild.supabase.co";
-const DEFAULT_SUPABASE_KEY = "sb_publishable_TtDl-B4_5TckUswQoC6Wtw_bqPUwlKl";
+const ORIGINAL_SUPABASE_URL = "https://qcddpjagzftwcsowpixm.supabase.co";
+const ORIGINAL_SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjZGRwamFnemZ0d2Nzb3dwaXhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NjI5NDEsImV4cCI6MjA4OTQzODk0MX0.FvYekd4CLMFA5XP_XD2BPHhCJt5Tyrzpq05UNf2ofio";
 
-let rawUrl = 
-    import.meta.env.VITE_SUPABASE_URL || 
-    import.meta.env.VITE__SUPABASE__URL || 
-    DEFAULT_SUPABASE_URL;
+let supabaseUrl = import.meta.env.VITE_SUPABASE_URL || ORIGINAL_SUPABASE_URL;
+let supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ORIGINAL_SUPABASE_KEY;
 
-// Autocorrección: si en Vercel quedó guardada la URL vieja pausada, usar la activa
-if (rawUrl.includes("qcddpjagzftwcsowpixm")) {
-    rawUrl = DEFAULT_SUPABASE_URL;
+// Garantizar que siempre use la base de datos real de "Plataforma de las clases"
+if (!supabaseUrl || supabaseUrl.includes("iufnuzodpsazoepurild")) {
+    supabaseUrl = ORIGINAL_SUPABASE_URL;
 }
-
-const supabaseUrl = rawUrl;
-
-const supabaseAnonKey = 
-    import.meta.env.VITE_SUPABASE_ANON_KEY || 
-    import.meta.env.VITE__SUPABASE__ANON__KEY || 
-    DEFAULT_SUPABASE_KEY;
+if (!supabaseAnonKey || supabaseAnonKey.startsWith("sb_publishable_")) {
+    supabaseAnonKey = ORIGINAL_SUPABASE_KEY;
+}
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
