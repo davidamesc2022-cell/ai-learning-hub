@@ -3,10 +3,17 @@ import { createClient } from '@supabase/supabase-js';
 const DEFAULT_SUPABASE_URL = "https://iufnuzodpsazoepurild.supabase.co";
 const DEFAULT_SUPABASE_KEY = "sb_publishable_TtDl-B4_5TckUswQoC6Wtw_bqPUwlKl";
 
-const supabaseUrl = 
+let rawUrl = 
     import.meta.env.VITE_SUPABASE_URL || 
     import.meta.env.VITE__SUPABASE__URL || 
     DEFAULT_SUPABASE_URL;
+
+// Autocorrección: si en Vercel quedó guardada la URL vieja pausada, usar la activa
+if (rawUrl.includes("qcddpjagzftwcsowpixm")) {
+    rawUrl = DEFAULT_SUPABASE_URL;
+}
+
+const supabaseUrl = rawUrl;
 
 const supabaseAnonKey = 
     import.meta.env.VITE_SUPABASE_ANON_KEY || 
