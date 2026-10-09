@@ -66,9 +66,18 @@ export function useCourses(initialFilters?: Partial<CourseFilters>) {
                     instructor: row.instructor,
                     duration: row.duration,
                     lessonsCount: row.lessons_count,
-                    thumbnail: (!row.thumbnail || row.thumbnail.includes("photo-1677442136019-21780efad99a"))
-                        ? "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=800"
-                        : row.thumbnail,
+                    thumbnail: (() => {
+                        if (row.title?.toLowerCase().includes("chatgpt sin confusión") || row.id === "c0000000-0000-0000-0000-000000000005") {
+                            return "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=800";
+                        }
+                        if (row.title?.toLowerCase().includes("domina la ia") || row.id === "c0000000-0000-0000-0000-000000000004") {
+                            return "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800";
+                        }
+                        if (!row.thumbnail || row.thumbnail.includes("photo-1677442136019-21780efad99a")) {
+                            return "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800";
+                        }
+                        return row.thumbnail;
+                    })(),
                     isNew: row.is_new,
                     isPopular: row.is_popular,
                     whatYouLearn: row.what_you_learn || [],

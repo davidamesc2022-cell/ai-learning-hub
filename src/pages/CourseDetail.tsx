@@ -177,10 +177,19 @@ export default function CourseDetail() {
                                     }}
                                     className={`flex items-center justify-between py-2 px-3 rounded-lg transition-colors ${canPlay ? "cursor-pointer hover:bg-muted/55 text-foreground" : "text-muted-foreground"}`}
                                   >
-                                    <div className="flex items-center gap-3">
-                                      {lesson.isFree ? <Play className="h-4 w-4 text-primary fill-primary/10" /> : <Lock className="h-4 w-4 text-muted-foreground" />}
-                                      <span className="text-sm font-medium">{lesson.title}</span>
-                                      {lesson.isFree && <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-primary/5 text-primary border-primary/20">Preview</Badge>}
+                                    <div className="flex items-start gap-3 py-1">
+                                      <div className="mt-0.5">
+                                        {lesson.isFree ? <Play className="h-4 w-4 text-primary fill-primary/10" /> : <Lock className="h-4 w-4 text-muted-foreground" />}
+                                      </div>
+                                      <div className="flex flex-col">
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                          <span className="text-sm font-medium">{lesson.title}</span>
+                                          {lesson.isFree && <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-primary/5 text-primary border-primary/20">Preview</Badge>}
+                                        </div>
+                                        {lesson.description && (
+                                          <span className="text-xs text-muted-foreground/80 mt-0.5 leading-relaxed">{lesson.description}</span>
+                                        )}
+                                      </div>
                                     </div>
                                     <span className="text-xs text-muted-foreground">{lesson.duration || "10 min"}</span>
                                   </div>

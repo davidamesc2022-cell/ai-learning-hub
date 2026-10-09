@@ -229,7 +229,7 @@ export default function Courses() {
                 {/* Portada con Imagen y Efecto Gradiente */}
                 <div className="relative h-64 overflow-hidden">
                   <img 
-                    src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=800" 
+                    src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800" 
                     alt="Pilar Inteligencia Artificial"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
