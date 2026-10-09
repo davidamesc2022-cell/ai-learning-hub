@@ -28,7 +28,18 @@ export default function CourseCard({ course }: { course: Course }) {
         {/* Thumbnail */}
         <div className="relative h-44 flex items-center justify-center overflow-hidden bg-muted">
           {course.thumbnail || course.thumbnailUrl ? (
-             <img src={course.thumbnail || course.thumbnailUrl} alt={course.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+             <img 
+               src={course.thumbnail || course.thumbnailUrl} 
+               alt={course.title} 
+               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+               onError={(e) => {
+                 const target = e.currentTarget;
+                 const fallback = "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=800";
+                 if (target.src !== fallback) {
+                   target.src = fallback;
+                 }
+               }}
+             />
           ) : (
             <>
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/10 to-transparent" />

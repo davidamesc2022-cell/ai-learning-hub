@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { Play, Pause, Volume2, Maximize, CheckCircle, ChevronLeft, ChevronRight, Lock, FileText, MessageSquare, StickyNote } from "lucide-react";
+import { 
+  Play, Pause, Volume2, Maximize, CheckCircle, ChevronLeft, ChevronRight, Lock, 
+  FileText, MessageSquare, StickyNote, Laptop, ExternalLink, Download, 
+  Maximize2, Minimize2, Target, CheckSquare, Sparkles 
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,6 +27,7 @@ export default function CoursePlayer() {
   const [completed, setCompleted] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isClassroomFullscreen, setIsClassroomFullscreen] = useState(false);
 
   const allLessonIdsStr = course?.modules?.flatMap(m => m.lessons?.map(l => l.id) || [])?.join(',') || '';
 
@@ -116,13 +121,133 @@ export default function CoursePlayer() {
 
           <h2 className="text-xl font-bold mb-4">{currentLesson.title}</h2>
 
-          <Tabs defaultValue="descripcion">
-            <TabsList className="bg-muted/50 mb-4">
+          <Tabs defaultValue={currentLesson.interactiveClassroomUrl ? "aula" : "descripcion"}>
+            <TabsList className="bg-muted/50 mb-4 flex-wrap h-auto gap-1 p-1">
+              {currentLesson.interactiveClassroomUrl && (
+                <TabsTrigger value="aula" className="font-semibold text-cyan-400 data-[state=active]:bg-cyan-500/10 data-[state=active]:text-cyan-400">
+                  <Laptop className="h-3.5 w-3.5 mr-1.5" />
+                  Aula Interactiva
+                </TabsTrigger>
+              )}
               <TabsTrigger value="descripcion"><FileText className="h-3.5 w-3.5 mr-1.5" />Descripción</TabsTrigger>
-              <TabsTrigger value="recursos"><FileText className="h-3.5 w-3.5 mr-1.5" />Recursos</TabsTrigger>
+              {currentLesson.assignment && (
+                <TabsTrigger value="tarea" className="font-semibold text-amber-400 data-[state=active]:bg-amber-500/10 data-[state=active]:text-amber-400">
+                  <Target className="h-3.5 w-3.5 mr-1.5" />
+                  Ahora hazlo tú
+                </TabsTrigger>
+              )}
+              <TabsTrigger value="recursos">
+                <Download className="h-3.5 w-3.5 mr-1.5" />
+                Recursos {currentLesson.resources && currentLesson.resources.length > 0 ? `(${currentLesson.resources.length})` : ''}
+              </TabsTrigger>
               <TabsTrigger value="notas"><StickyNote className="h-3.5 w-3.5 mr-1.5" />Notas</TabsTrigger>
               <TabsTrigger value="comentarios"><MessageSquare className="h-3.5 w-3.5 mr-1.5" />Comentarios</TabsTrigger>
             </TabsList>
+
+            {/* TAB: AULA INTERACTIVA */}
+            {currentLesson.interactiveClassroomUrl && (
+              <TabsContent value="aula">
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-muted/40 border border-border">
+                    <div>
+                      <h3 className="font-bold text-base flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-cyan-400" />
+                        Aula Interactiva · {currentLesson.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Explora los conceptos, ramas e interacciones paso a paso.
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setIsClassroomFullscreen(!isClassroomFullscreen)}
+                        className="text-xs"
+                      >
+                        {isClassroomFullscreen ? (
+                          <><Minimize2 className="w-3.5 h-3.5 mr-1.5" /> Salir de Pantalla Completa</>
+                        ) : (
+                          <><Maximize2 className="w-3.5 h-3.5 mr-1.5" /> Pantalla Completa</>
+                        )}
+                      </Button>
+
+                      <a 
+                        href={currentLesson.interactiveClassroomUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                      >
+                        <Button size="sm" variant="secondary" className="text-xs">
+                          <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> Abrir en nueva pestaña
+                        </Button>
+                      </a>
+
+                      {currentLesson.allowDownloadClassroom && (
+                        <a 
+                          href={currentLesson.interactiveClassroomUrl} 
+                          download
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button size="sm" variant="outline" className="text-xs">
+                            <Download className="w-3.5 h-3.5 mr-1.5" /> Descargar Aula (.html)
+                          </Button>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Visor Iframe del Aula */}
+                  <div className={`rounded-xl border border-border overflow-hidden bg-slate-950 transition-all ${
+                    isClassroomFullscreen ? "fixed inset-4 z-50 shadow-2xl flex flex-col bg-slate-950" : "w-full h-[620px]"
+                  }`}>
+                    {isClassroomFullscreen && (
+                      <div className="p-3 bg-slate-900 border-b border-border flex items-center justify-between">
+                        <span className="text-xs font-semibold text-slate-200 flex items-center gap-2">
+                          <Laptop className="w-4 h-4 text-cyan-400" /> Aula Interactiva · Modo Pantalla Completa
+                        </span>
+                        <Button size="sm" variant="ghost" onClick={() => setIsClassroomFullscreen(false)}>
+                          <Minimize2 className="w-4 h-4 mr-1.5" /> Cerrar
+                        </Button>
+                      </div>
+                    )}
+                    <iframe
+                      src={currentLesson.interactiveClassroomUrl}
+                      title={`Aula Interactiva: ${currentLesson.title}`}
+                      className="w-full h-full border-0 flex-1 bg-white"
+                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+            )}
+
+            {/* TAB: AHORA HAZLO TÚ (TAREA / APLICACIÓN PRÁCTICA) */}
+            {currentLesson.assignment && (
+              <TabsContent value="tarea">
+                <div className="p-6 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-xl bg-amber-500/15 text-amber-500">
+                      <Target className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-base text-foreground">Ahora hazlo tú: Aplicación en tu cuenta real</h3>
+                      <p className="text-xs text-muted-foreground">Consigna de aplicación práctica del módulo</p>
+                    </div>
+                  </div>
+
+                  <div className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap pl-3 border-l-2 border-amber-500/50 py-1">
+                    {currentLesson.assignment}
+                  </div>
+
+                  <div className="pt-2 text-xs text-muted-foreground flex items-center gap-2">
+                    <CheckSquare className="w-4 h-4 text-primary shrink-0" />
+                    <span>Realiza esta práctica en tu cuenta de ChatGPT para consolidar la transformación de este módulo.</span>
+                  </div>
+                </div>
+              </TabsContent>
+            )}
             <TabsContent value="descripcion">
               <div className="space-y-4 text-sm text-muted-foreground whitespace-pre-wrap">
                 <p>

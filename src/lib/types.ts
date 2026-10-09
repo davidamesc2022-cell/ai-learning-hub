@@ -27,6 +27,9 @@ export interface Lesson {
   videoUrl?: string;
   resources?: Resource[];
   description?: string;
+  interactiveClassroomUrl?: string;
+  allowDownloadClassroom?: boolean;
+  assignment?: string;
 }
 
 export interface Module {

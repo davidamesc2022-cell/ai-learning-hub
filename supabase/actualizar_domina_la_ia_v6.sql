@@ -45,7 +45,7 @@ INSERT INTO public.courses (
   'David Ames',
   '12 horas', -- Duración ampliada
   30, -- Total de lecciones insertadas
-  'https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=800', -- Portada temática sobre IA
+  'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=800', -- Portada temática sobre IA (activa)
   true, -- Nuevo
   true, -- Popular
   

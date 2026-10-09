@@ -66,7 +66,9 @@ export function useCourses(initialFilters?: Partial<CourseFilters>) {
                     instructor: row.instructor,
                     duration: row.duration,
                     lessonsCount: row.lessons_count,
-                    thumbnail: row.thumbnail,
+                    thumbnail: (!row.thumbnail || row.thumbnail.includes("photo-1677442136019-21780efad99a"))
+                        ? "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=800"
+                        : row.thumbnail,
                     isNew: row.is_new,
                     isPopular: row.is_popular,
                     whatYouLearn: row.what_you_learn || [],
@@ -87,6 +89,9 @@ export function useCourses(initialFilters?: Partial<CourseFilters>) {
                                     isFree: l.is_free,
                                     videoUrl: l.video_url,
                                     description: l.description,
+                                    interactiveClassroomUrl: l.interactive_classroom_url || l.resources?.find((r: any) => r.type === 'interactive_classroom' || r.type === 'classroom')?.url,
+                                    allowDownloadClassroom: l.allow_classroom_download !== undefined ? l.allow_classroom_download : true,
+                                    assignment: l.assignment || l.resources?.find((r: any) => r.type === 'assignment')?.content,
                                     resources: l.resources || []
                                 }))
                         }))
