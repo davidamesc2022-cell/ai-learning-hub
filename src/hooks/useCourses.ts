@@ -67,6 +67,14 @@ export function useCourses(initialFilters?: Partial<CourseFilters>) {
                     duration: row.duration,
                     lessonsCount: row.lessons_count,
                     thumbnail: (() => {
+                        if (
+                            row.title?.toLowerCase().includes("generación de imágenes") || 
+                            row.title?.toLowerCase().includes("generacion de imagenes") || 
+                            row.id === "c0000000-0000-0000-0000-000000000003" ||
+                            row.thumbnail?.includes("photo-1618005182384-a83a8bd57fbe")
+                        ) {
+                            return "/images/generacion-imagenes-video-ia.jpg";
+                        }
                         if (row.title?.toLowerCase().includes("chatgpt sin confusión") || row.id === "c0000000-0000-0000-0000-000000000005") {
                             return "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=800";
                         }
