@@ -1,5 +1,16 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Star, Zap, Brain, CheckCircle, Loader2, Rocket, BrainCircuit } from "lucide-react";
+import { 
+  ArrowRight, 
+  Star, 
+  Zap, 
+  Brain, 
+  CheckCircle, 
+  Loader2, 
+  Sparkles, 
+  TrendingUp, 
+  Bot, 
+  CheckCircle2 
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/layout/Navbar";
@@ -11,7 +22,10 @@ import StudentWorldMap from "@/components/StudentWorldMap";
 import InstructorSection from "@/components/InstructorSection";
 
 export default function Index() {
-  const { featuredCourses, isLoading } = useCourses();
+  const { featuredCourses, courses, isLoading } = useCourses();
+
+  const marketingCount = courses.filter(c => c.category === "marketing" || c.title.toLowerCase().includes("método 4c") || c.title.toLowerCase().includes("metodo 4c")).length || 2;
+  const iaCount = courses.filter(c => c.category === "ia" && !c.title.toLowerCase().includes("método 4c") && !c.title.toLowerCase().includes("metodo 4c")).length || 3;
 
   return (
     <div className="min-h-screen bg-background">
@@ -84,48 +98,182 @@ export default function Index() {
       {/* Sección del Instructor */}
       <InstructorSection />
 
-      {/* Pilares (Esferas Premium) */}
+      {/* Pilares de Especialización (Ecosistemas de Alto Impacto) */}
       <section className="bg-muted/10 py-24 border-y border-border">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 max-w-6xl">
           <div className="max-w-3xl mx-auto text-center mb-16">
+            <Badge variant="outline" className="mb-4 px-4 py-1.5 border-primary/30 bg-primary/10 text-primary font-semibold">
+              <Sparkles className="w-3.5 h-3.5 mr-1.5 inline" />
+              Rutas de Especialización
+            </Badge>
             <h2 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-foreground">
-              Elige tu <span className="text-primary italic">Ruta de Aprendizaje</span>
+              Elige tu <span className="text-primary italic">Ruta de Especialización</span>
             </h2>
             <p className="text-muted-foreground text-lg">
-              Tenemos dos caminos diseñados a medida para ti. Selecciona tu perfil y descubre los cursos exactos que impulsarán tu carrera.
+              Diseñadas para generar una transformación tangible en tu capacidad profesional y empresarial. Selecciona el pilar estratégico donde deseas construir tu ventaja competitiva.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Esfera 1: Emprendedor / Marketing */}
-            <Link to="/courses?category=marketing" className="block relative group overflow-hidden rounded-[2rem] p-8 border-2 border-border/60 bg-card hover:border-primary/40 hover:shadow-[0_20px_50px_-12px_rgba(var(--primary),0.3)] hover:-translate-y-1 transition-all duration-300">
-              <div className="mb-6 inline-flex p-4 rounded-2xl bg-gradient-to-br from-orange-400 to-rose-500 shadow-inner ring-1 ring-white/20 group-hover:scale-110 transition-transform duration-300">
-                <Rocket className="h-10 w-10 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold mb-1">Marketing y Negocios</h3>
-              <p className="text-sm font-semibold text-primary mb-4 uppercase tracking-wider">Crecimiento y Ventas con IA</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Aprende a inyectar Inteligencia Artificial en el ADN de tu marca. Ya sea que estés lanzando tu primera idea o liderando una empresa con años en el mercado; automatiza procesos, crea campañas irresistibles y cierra más ventas.
-              </p>
-              <div className="mt-6 flex items-center text-primary font-semibold group-hover:translate-x-2 transition-transform">
-                Explorar ruta <ArrowRight className="ml-2 h-4 w-4" />
-              </div>
-            </Link>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Pilar 1: Marketing Digital & Crecimiento con IA */}
+            <div className="group relative rounded-2xl overflow-hidden border border-border bg-card hover:border-primary/50 transition-all duration-300 shadow-xl hover:shadow-2xl flex flex-col">
+              <div className="relative h-64 overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" 
+                  alt="Marketing Digital & Crecimiento con IA"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/60 to-transparent" />
+                
+                <div className="absolute top-4 left-4">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/90 text-white backdrop-blur-md shadow-md">
+                    <TrendingUp className="w-3.5 h-3.5" />
+                    Especialización Estratégica · Crecimiento & Ventas
+                  </span>
+                </div>
 
-            {/* Esfera 2: Profesional / IA */}
-            <Link to="/courses?category=ia" className="block relative group overflow-hidden rounded-[2rem] p-8 border-2 border-border/60 bg-card hover:border-primary/40 hover:shadow-[0_20px_50px_-12px_rgba(var(--primary),0.3)] hover:-translate-y-1 transition-all duration-300">
-              <div className="mb-6 inline-flex p-4 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 shadow-inner ring-1 ring-white/20 group-hover:scale-110 transition-transform duration-300">
-                <BrainCircuit className="h-10 w-10 text-white" />
+                <div className="absolute top-4 right-4">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-background/80 text-foreground backdrop-blur-md border border-border">
+                    {marketingCount} Cursos
+                  </span>
+                </div>
               </div>
-              <h3 className="text-2xl font-bold mb-1">Productividad y Dominio IA</h3>
-              <p className="text-sm font-semibold text-primary mb-4 uppercase tracking-wider">Para profesionales de toda área</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Multiplica por diez tu eficiencia diaria. Sin importar tu profesión previa, aprende a delegar tareas repetitivas a la IA, acelerar tu aprendizaje y destacar enormemente en tu trabajo usando agentes y automatizaciones.
-              </p>
-              <div className="mt-6 flex items-center text-primary font-semibold group-hover:translate-x-2 transition-transform">
-                Explorar ruta <ArrowRight className="ml-2 h-4 w-4" />
+
+              <div className="p-8 flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-500">
+                      <TrendingUp className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-2xl font-bold group-hover:text-primary transition-colors">
+                      Marketing Digital & Ecosistemas de Ventas con IA
+                    </h3>
+                  </div>
+
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+                    Convierte la Inteligencia Artificial en el motor de atracción y facturación de tu negocio. Pasa de esfuerzos manuales y resultados impredecibles a construir infraestructuras comerciales automatizadas que captan, nutren y convierten prospectos en clientes de forma predecible y continua.
+                  </p>
+
+                  <ul className="space-y-3 mb-8 text-sm text-foreground/90">
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                      <div>
+                        <strong>Máquinas de Prospección & Adquisición:</strong>
+                        <span className="text-muted-foreground block text-xs mt-0.5">Diseña sistemas que atraen tráfico cualificado y filtran oportunidades comerciales 24/7.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                      <div>
+                        <strong>Psicología Comercial & Hiperpersonalización:</strong>
+                        <span className="text-muted-foreground block text-xs mt-0.5">Usa la IA para decodificar a tu cliente ideal, crear ofertas irresistibles y multiplicar la conversión.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                      <div>
+                        <strong>Metodologías Ágiles de Venta (Método 4C):</strong>
+                        <span className="text-muted-foreground block text-xs mt-0.5">Marcos probados que aceleran el ciclo comercial y optimizan cada punto de contacto.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                      <div>
+                        <strong>Escalabilidad de Negocio sin Fricción:</strong>
+                        <span className="text-muted-foreground block text-xs mt-0.5">Expande tus ingresos sin necesidad de multiplicar tus horas de trabajo ni tu estructura operativa.</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <Link to="/courses?pillar=marketing" className="w-full">
+                  <Button size="lg" className="w-full font-bold group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                    Explorar la Especialización en Marketing
+                    <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
               </div>
-            </Link>
+            </div>
+
+            {/* Pilar 2: Inteligencia Artificial Aplicada & Sistemas Autónomos */}
+            <div className="group relative rounded-2xl overflow-hidden border border-border bg-card hover:border-primary/50 transition-all duration-300 shadow-xl hover:shadow-2xl flex flex-col">
+              <div className="relative h-64 overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800" 
+                  alt="Inteligencia Artificial Aplicada & Sistemas Autónomos"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/60 to-transparent" />
+                
+                <div className="absolute top-4 left-4">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/90 text-white backdrop-blur-md shadow-md">
+                    <Bot className="w-3.5 h-3.5" />
+                    Especialización Tecnológica · Agentes & Automatización
+                  </span>
+                </div>
+
+                <div className="absolute top-4 right-4">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-background/80 text-foreground backdrop-blur-md border border-border">
+                    {iaCount} Cursos
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-8 flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-500">
+                      <Bot className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-2xl font-bold group-hover:text-primary transition-colors">
+                      Inteligencia Artificial Aplicada & Sistemas Autónomos
+                    </h3>
+                  </div>
+
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+                    Evoluciona de ser un usuario básico a liderar la era cognitiva. Aprende a orquestar ecosistemas de agentes autónomos, integrar flujos de automatización complejos y crear soluciones digitales a medida que multiplican radicalmente tu capacidad de ejecución y resuelven desafíos de alto impacto.
+                  </p>
+
+                  <ul className="space-y-3 mb-8 text-sm text-foreground/90">
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-cyan-500 mt-1 flex-shrink-0" />
+                      <div>
+                        <strong>De Asistentes a Agentes Autónomos:</strong>
+                        <span className="text-muted-foreground block text-xs mt-0.5">Deja de chatear y aprende a delegar objetivos completos a agentes que coordinan herramientas 24/7.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-cyan-500 mt-1 flex-shrink-0" />
+                      <div>
+                        <strong>Automatización de Procesos Críticos:</strong>
+                        <span className="text-muted-foreground block text-xs mt-0.5">Diseña arquitecturas operativas donde la IA, tus datos y tus plataformas operen sincronizadas sin fricción.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-cyan-500 mt-1 flex-shrink-0" />
+                      <div>
+                        <strong>Creación de Soluciones Propias (Vibe Coding):</strong>
+                        <span className="text-muted-foreground block text-xs mt-0.5">Desarrolla aplicaciones web, herramientas internas y asistentes sin saber programar.</span>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-cyan-500 mt-1 flex-shrink-0" />
+                      <div>
+                        <strong>Criterio Técnico & Supervisión Estratégica:</strong>
+                        <span className="text-muted-foreground block text-xs mt-0.5">Desarrolla la visión para evaluar qué modelo, flujo o arquitectura implementar ante cualquier reto.</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <Link to="/courses?pillar=ia" className="w-full">
+                  <Button size="lg" className="w-full font-bold group-hover:bg-cyan-500 group-hover:text-white transition-all">
+                    Explorar la Especialización en IA
+                    <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>

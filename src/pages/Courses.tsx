@@ -169,7 +169,7 @@ export default function Courses() {
                   <div className="absolute top-4 left-4">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/90 text-white backdrop-blur-md shadow-md">
                       <TrendingUp className="w-3.5 h-3.5" />
-                      Especialización en Crecimiento
+                      Especialización Estratégica · Crecimiento & Ventas
                     </span>
                   </div>
 
@@ -188,34 +188,50 @@ export default function Courses() {
                         <TrendingUp className="w-6 h-6" />
                       </div>
                       <h2 className="text-2xl font-bold group-hover:text-primary transition-colors">
-                        Marketing Digital con IA
+                        Marketing Digital & Ecosistemas de Ventas con IA
                       </h2>
                     </div>
 
                     <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                      Aprende a captar clientes calificados, crear embudos de alta conversión y automatizar ventas digitales utilizando estrategias probadas y herramientas de IA.
+                      Convierte la Inteligencia Artificial en el motor de atracción y facturación de tu negocio. Pasa de esfuerzos manuales y resultados impredecibles a construir infraestructuras comerciales automatizadas que captan, nutren y convierten prospectos en clientes de forma predecible y continua.
                     </p>
 
                     {/* Puntos Clave */}
-                    <ul className="space-y-2.5 mb-8 text-sm text-foreground/90">
-                      <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                        <span>Sistemas de ventas y prospección ágil (Método 4C)</span>
+                    <ul className="space-y-3 mb-8 text-sm text-foreground/90">
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                        <div>
+                          <strong>Máquinas de Prospección & Adquisición:</strong>
+                          <span className="text-muted-foreground block text-xs mt-0.5">Diseña sistemas que atraen tráfico cualificado y filtran oportunidades comerciales 24/7.</span>
+                        </div>
                       </li>
-                      <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                        <span>Embudos y estrategias de marketing impulsadas por IA</span>
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                        <div>
+                          <strong>Psicología Comercial & Hiperpersonalización:</strong>
+                          <span className="text-muted-foreground block text-xs mt-0.5">Usa la IA para decodificar a tu cliente ideal, crear ofertas irresistibles y multiplicar la conversión.</span>
+                        </div>
                       </li>
-                      <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                        <span>Modelos de monetización y escalabilidad de negocios</span>
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                        <div>
+                          <strong>Metodologías Ágiles de Venta (Método 4C):</strong>
+                          <span className="text-muted-foreground block text-xs mt-0.5">Marcos probados que aceleran el ciclo comercial y optimizan cada punto de contacto.</span>
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                        <div>
+                          <strong>Escalabilidad de Negocio sin Fricción:</strong>
+                          <span className="text-muted-foreground block text-xs mt-0.5">Expande tus ingresos sin necesidad de multiplicar tus horas de trabajo ni tu estructura operativa.</span>
+                        </div>
                       </li>
                     </ul>
                   </div>
 
                   {/* Botón CTA */}
                   <Button size="lg" className="w-full font-bold group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-                    Explorar Pilar de Marketing
+                    Explorar la Especialización en Marketing
                     <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </div>
@@ -239,7 +255,7 @@ export default function Courses() {
                   <div className="absolute top-4 left-4">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/90 text-white backdrop-blur-md shadow-md">
                       <Bot className="w-3.5 h-3.5" />
-                      Especialización Tecnológica
+                      Especialización Tecnológica · Agentes & Automatización
                     </span>
                   </div>
 
@@ -258,34 +274,50 @@ export default function Courses() {
                         <Bot className="w-6 h-6" />
                       </div>
                       <h2 className="text-2xl font-bold group-hover:text-primary transition-colors">
-                        Inteligencia Artificial Aplicada
+                        Inteligencia Artificial Aplicada & Sistemas Autónomos
                       </h2>
                     </div>
 
                     <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                      De principiante a constructor de soluciones. Domina los modelos más avanzados (ChatGPT, Claude, Gemini), genera multimedia profesional y programa con IA.
+                      Evoluciona de ser un usuario básico a liderar la era cognitiva. Aprende a orquestar ecosistemas de agentes autónomos, integrar flujos de automatización complejos y crear soluciones digitales a medida que multiplican radicalmente tu capacidad de ejecución y resuelven desafíos de alto impacto.
                     </p>
 
                     {/* Puntos Clave */}
-                    <ul className="space-y-2.5 mb-8 text-sm text-foreground/90">
-                      <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-cyan-500 mt-0.5 flex-shrink-0" />
-                        <span>Generación y edición de imágenes y video con IA</span>
+                    <ul className="space-y-3 mb-8 text-sm text-foreground/90">
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-cyan-500 mt-1 flex-shrink-0" />
+                        <div>
+                          <strong>De Asistentes a Agentes Autónomos:</strong>
+                          <span className="text-muted-foreground block text-xs mt-0.5">Deja de chatear y aprende a delegar objetivos completos a agentes que coordinan herramientas 24/7.</span>
+                        </div>
                       </li>
-                      <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-cyan-500 mt-0.5 flex-shrink-0" />
-                        <span>Creación de Agentes autónomos y automatizaciones</span>
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-cyan-500 mt-1 flex-shrink-0" />
+                        <div>
+                          <strong>Automatización de Procesos Críticos:</strong>
+                          <span className="text-muted-foreground block text-xs mt-0.5">Diseña arquitecturas operativas donde la IA, tus datos y tus plataformas operen sincronizadas sin fricción.</span>
+                        </div>
                       </li>
-                      <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-cyan-500 mt-0.5 flex-shrink-0" />
-                        <span>Vibe Coding: desarrollo de herramientas digitales sin programar</span>
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-cyan-500 mt-1 flex-shrink-0" />
+                        <div>
+                          <strong>Creación de Soluciones Propias (Vibe Coding):</strong>
+                          <span className="text-muted-foreground block text-xs mt-0.5">Desarrolla aplicaciones web, herramientas internas y asistentes sin saber programar.</span>
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-cyan-500 mt-1 flex-shrink-0" />
+                        <div>
+                          <strong>Criterio Técnico & Supervisión Estratégica:</strong>
+                          <span className="text-muted-foreground block text-xs mt-0.5">Desarrolla la visión para evaluar qué modelo, flujo o arquitectura implementar ante cualquier reto.</span>
+                        </div>
                       </li>
                     </ul>
                   </div>
 
                   {/* Botón CTA */}
                   <Button size="lg" className="w-full font-bold group-hover:bg-cyan-500 group-hover:text-white transition-all">
-                    Explorar Pilar de IA
+                    Explorar la Especialización en IA
                     <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </div>
@@ -363,17 +395,17 @@ export default function Courses() {
             <div className="mb-8">
               <h1 className="text-3xl font-extrabold mb-2">
                 {selectedPillar === "marketing" 
-                  ? "Cursos de Marketing Digital con IA" 
+                  ? "Especialización en Marketing Digital & Ecosistemas de Ventas con IA" 
                   : selectedPillar === "ia" 
-                  ? "Cursos de Inteligencia Artificial Aplicada" 
+                  ? "Especialización en Inteligencia Artificial Aplicada & Sistemas Autónomos" 
                   : "Todos los Cursos de la Academia"}
               </h1>
               <p className="text-muted-foreground">
                 {selectedPillar === "marketing"
-                  ? "Entrenamientos enfocados en ventas, adquisición y crecimiento para emprendedores y negocios."
+                  ? "Infraestructuras comerciales, prospección automatizada y metodologías ágiles de monetización potenciadas por Inteligencia Artificial."
                   : selectedPillar === "ia"
-                  ? "Programas prácticos para dominar herramientas, prompts, multimedia y agentes inteligentes."
-                  : "Explora la totalidad de contenidos disponibles en David Ames Academy."}
+                  ? "Desde la comprensión estratégica de modelos hasta la creación de agentes autónomos, flujos de automatización y desarrollo con IA (Vibe Coding)."
+                  : "Explora la totalidad de contenidos y programas especializados disponibles en David Ames Academy."}
               </p>
             </div>
 
