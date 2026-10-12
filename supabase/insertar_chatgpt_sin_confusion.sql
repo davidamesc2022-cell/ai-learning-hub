@@ -49,7 +49,7 @@ INSERT INTO public.courses (
   'David Ames',
   '12 horas',
   12,
-  'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=800', -- Portada realista de sistemas y workflows
+  '/images/curso-chatgpt-sin-confusion.jpg', -- Portada realista con isotipo oficial ChatGPT 3D e interfaces de sistemas
   true,
   true,
   ARRAY[

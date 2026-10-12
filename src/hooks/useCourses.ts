@@ -76,7 +76,7 @@ export function useCourses(initialFilters?: Partial<CourseFilters>) {
                             return "/images/generacion-imagenes-video-ia.jpg";
                         }
                         if (row.title?.toLowerCase().includes("chatgpt sin confusión") || row.id === "c0000000-0000-0000-0000-000000000005") {
-                            return "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=800";
+                            return "/images/curso-chatgpt-sin-confusion.jpg";
                         }
                         if (row.title?.toLowerCase().includes("domina la ia") || row.id === "c0000000-0000-0000-0000-000000000004") {
                             return "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800";
