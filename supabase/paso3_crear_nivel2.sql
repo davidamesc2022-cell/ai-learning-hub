@@ -67,8 +67,6 @@ INSERT INTO public.lessons (id, module_id, title, description, duration, is_free
 INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000002', 'Sesión 4 · Valor y Posicionamiento en vivo', 5) ON CONFLICT (id) DO NOTHING;
 INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000004', 'd2000000-0000-0000-0000-000000000004', 'Formula tu diferencial con datos', 'Propuesta de valor y posicionamiento aplicados.', '60:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000002', 'Sesión 5 · Estrategia de Contenidos en vivo', 6) ON CONFLICT (id) DO NOTHING;
--- Wait, d2000000-0000-0000-0000-000000000005:
 INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000002', 'Sesión 5 · Estrategia de Contenidos en vivo', 6) ON CONFLICT (id) DO NOTHING;
 INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000005', 'd2000000-0000-0000-0000-000000000005', 'Arma tu calendario editorial real', 'Plan de 30 días listo para publicar.', '60:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
