@@ -21,10 +21,6 @@ WHERE module_id IN (
 DELETE FROM public.modules 
 WHERE course_id IN ('c0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002');
 
--- Eliminar inscripciones anteriores de esos cursos
-DELETE FROM public.user_courses 
-WHERE course_id IN ('c0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002');
-
 -- Eliminar los cursos obsoletos
 DELETE FROM public.courses 
 WHERE id IN ('c0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002');
