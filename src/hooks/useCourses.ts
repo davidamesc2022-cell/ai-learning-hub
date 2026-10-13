@@ -78,6 +78,12 @@ export function useCourses(initialFilters?: Partial<CourseFilters>) {
                         if (row.title?.toLowerCase().includes("chatgpt sin confusión") || row.id === "c0000000-0000-0000-0000-000000000005") {
                             return "/images/curso-chatgpt-sin-confusion.jpg";
                         }
+                        if (row.title?.toLowerCase().includes("nivel 1") || row.id === "c0000000-0000-0000-0000-000000000001") {
+                            return "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800";
+                        }
+                        if (row.title?.toLowerCase().includes("nivel 2") || row.id === "c0000000-0000-0000-0000-000000000002") {
+                            return "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=800";
+                        }
                         if (row.title?.toLowerCase().includes("domina la ia") || row.id === "c0000000-0000-0000-0000-000000000004") {
                             return "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800";
                         }
