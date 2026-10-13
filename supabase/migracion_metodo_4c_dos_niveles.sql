@@ -84,92 +84,49 @@ INSERT INTO public.courses (
     'Profesionales independientes, marcas personales y agencias de marketing.',
     'Cualquier persona que quiera dejar de improvisar y construir un sistema de crecimiento escalable.'
   ]
-);
+) ON CONFLICT (id) DO UPDATE SET 
+  title = EXCLUDED.title, 
+  description = EXCLUDED.description,
+  long_description = EXCLUDED.long_description,
+  category = EXCLUDED.category,
+  price = EXCLUDED.price;
 
 -- MÓDULOS Y LECCIONES NIVEL 1
--- Módulo 0
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c1-mod-00', 'c0000000-0000-0000-0000-000000000001', 'Módulo 0', 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d1000000-0000-0000-0000-000000000000', 'c0000000-0000-0000-0000-000000000001', 'Módulo 0', 1) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e1000000-0000-0000-0000-000000000000', 'd1000000-0000-0000-0000-000000000000', 'Visión completa del Método 4C', 'Entiende el sistema entero antes de construir cada pieza.', '15:00', true, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c1-les-00', 'm4c1-mod-00', 'Visión completa del Método 4C', 'Entiende el sistema entero antes de construir cada pieza.', '15:00', true, 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d1000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001', 'C1 · Briefing', 2) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e1000000-0000-0000-0000-000000000001', 'd1000000-0000-0000-0000-000000000001', 'Documenta lo que tu negocio ya sabe', 'Extrae y organiza la información que tienes en la cabeza pero nunca has escrito.', '20:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
--- C1 · Briefing
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c1-mod-01', 'c0000000-0000-0000-0000-000000000001', 'C1 · Briefing', 2);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d1000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000001', 'C1 · Estudio de Mercado', 3) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e1000000-0000-0000-0000-000000000002', 'd1000000-0000-0000-0000-000000000002', 'Conoce tu arena antes de competir', 'Investiga competencia, precios, patrones y brechas de oportunidad.', '25:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c1-les-01', 'm4c1-mod-01', 'Documenta lo que tu negocio ya sabe', 'Extrae y organiza la información que tienes en la cabeza pero nunca has escrito.', '20:00', false, 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d1000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000001', 'C1 · Cliente Ideal', 4) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e1000000-0000-0000-0000-000000000003', 'd1000000-0000-0000-0000-000000000003', 'Sabe exactamente a quién le vendes', 'Construye el perfil 360° con microdolores y afirmaciones reales.', '25:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
--- C1 · Estudio de Mercado
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c1-mod-02', 'c0000000-0000-0000-0000-000000000001', 'C1 · Estudio de Mercado', 3);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d1000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000001', 'C1 · Valor y Posicionamiento', 5) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e1000000-0000-0000-0000-000000000004', 'd1000000-0000-0000-0000-000000000004', 'Define por qué deberían elegirte a ti', 'Propuesta de valor, posicionamiento y personalidad verbal de tu marca.', '20:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c1-les-02', 'm4c1-mod-02', 'Conoce tu arena antes de competir', 'Investiga competencia, precios, patrones y brechas de oportunidad.', '25:00', false, 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d1000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000001', 'C1 · Estrategia de Contenidos', 6) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e1000000-0000-0000-0000-000000000005', 'd1000000-0000-0000-0000-000000000005', 'Tu plan de 30 días listo para ejecutar', 'Pilares, ángulos, formatos y calendario editorial con propósito.', '25:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
--- C1 · Cliente Ideal
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c1-mod-03', 'c0000000-0000-0000-0000-000000000001', 'C1 · Cliente Ideal', 4);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d1000000-0000-0000-0000-000000000006', 'c0000000-0000-0000-0000-000000000001', 'C2 · Branding y Dirección Visual', 7) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e1000000-0000-0000-0000-000000000006', 'd1000000-0000-0000-0000-000000000006', 'Define cómo se ve todo lo que produces', 'Paleta, tipografías, estilo y reglas de aplicación visual.', '20:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c1-les-03', 'm4c1-mod-03', 'Sabe exactamente a quién le vendes', 'Construye el perfil 360° con microdolores y afirmaciones reales.', '25:00', false, 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d1000000-0000-0000-0000-000000000007', 'c0000000-0000-0000-0000-000000000001', 'C2 · Piezas Visuales', 8) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e1000000-0000-0000-0000-000000000007', 'd1000000-0000-0000-0000-000000000007', 'Produce contenido visual con sistema', 'Briefs, jerarquía, copy y dirección de arte por pieza.', '25:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
--- C1 · Valor y Posicionamiento
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c1-mod-04', 'c0000000-0000-0000-0000-000000000001', 'C1 · Valor y Posicionamiento', 5);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d1000000-0000-0000-0000-000000000008', 'c0000000-0000-0000-0000-000000000001', 'C3 · Mensajes, Guiones y Video', 9) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e1000000-0000-0000-0000-000000000008', 'd1000000-0000-0000-0000-000000000008', 'Las palabras y los guiones que venden', 'Matriz de mensajes, hooks, copy por formato y guiones de video.', '30:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c1-les-04', 'm4c1-mod-04', 'Define por qué deberían elegirte a ti', 'Propuesta de valor, posicionamiento y personalidad verbal de tu marca.', '20:00', false, 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d1000000-0000-0000-0000-000000000009', 'c0000000-0000-0000-0000-000000000001', 'C4 · Ruta de Conversión', 10) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e1000000-0000-0000-0000-000000000009', 'd1000000-0000-0000-0000-000000000009', 'Del primer contacto al cierre', 'Mapa de ruta, diagnóstico, objeciones y cierre ético.', '30:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
--- C1 · Estrategia de Contenidos
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c1-mod-05', 'c0000000-0000-0000-0000-000000000001', 'C1 · Estrategia de Contenidos', 6);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d1000000-0000-0000-0000-000000000010', 'c0000000-0000-0000-0000-000000000001', 'C4 · Fidelización y Seguimiento', 11) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e1000000-0000-0000-0000-000000000010', 'd1000000-0000-0000-0000-000000000010', 'Que cada cliente vuelva y te recomiende', 'Postventa, nutrición, reactivación, referidos y métricas.', '25:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c1-les-05', 'm4c1-mod-05', 'Tu plan de 30 días listo para ejecutar', 'Pilares, ángulos, formatos y calendario editorial con propósito.', '25:00', false, 1);
-
--- C2 · Branding y Dirección Visual
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c1-mod-06', 'c0000000-0000-0000-0000-000000000001', 'C2 · Branding y Dirección Visual', 7);
-
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c1-les-06', 'm4c1-mod-06', 'Define cómo se ve todo lo que produces', 'Paleta, tipografías, estilo y reglas de aplicación visual.', '20:00', false, 1);
-
--- C2 · Piezas Visuales
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c1-mod-07', 'c0000000-0000-0000-0000-000000000001', 'C2 · Piezas Visuales', 8);
-
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c1-les-07', 'm4c1-mod-07', 'Produce contenido visual con sistema', 'Briefs, jerarquía, copy y dirección de arte por pieza.', '25:00', false, 1);
-
--- C3 · Mensajes, Guiones y Video
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c1-mod-08', 'c0000000-0000-0000-0000-000000000001', 'C3 · Mensajes, Guiones y Video', 9);
-
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c1-les-08', 'm4c1-mod-08', 'Las palabras y los guiones que venden', 'Matriz de mensajes, hooks, copy por formato y guiones de video.', '30:00', false, 1);
-
--- C4 · Ruta de Conversión
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c1-mod-09', 'c0000000-0000-0000-0000-000000000001', 'C4 · Ruta de Conversión', 10);
-
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c1-les-09', 'm4c1-mod-09', 'Del primer contacto al cierre', 'Mapa de ruta, diagnóstico, objeciones y cierre ético.', '30:00', false, 1);
-
--- C4 · Fidelización y Seguimiento
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c1-mod-10', 'c0000000-0000-0000-0000-000000000001', 'C4 · Fidelización y Seguimiento', 11);
-
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c1-les-10', 'm4c1-mod-10', 'Que cada cliente vuelva y te recomiende', 'Postventa, nutrición, reactivación, referidos y métricas.', '25:00', false, 1);
-
--- Cierre del Nivel 1
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c1-mod-11', 'c0000000-0000-0000-0000-000000000001', 'Cierre del Nivel 1', 12);
-
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c1-les-11', 'm4c1-mod-11', 'Tu Carpeta 4C completa', 'Revisión final del sistema y presentación del Nivel 2.', '20:00', false, 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d1000000-0000-0000-0000-000000000011', 'c0000000-0000-0000-0000-000000000001', 'Cierre del Nivel 1', 12) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e1000000-0000-0000-0000-000000000011', 'd1000000-0000-0000-0000-000000000011', 'Tu Carpeta 4C completa', 'Revisión final del sistema y presentación del Nivel 2.', '20:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
 
 -- ---------------------------------------------------------------------
@@ -230,92 +187,49 @@ INSERT INTO public.courses (
     'Dueños de negocio que desean implementar un pipeline de prospección y ventas validado.',
     'Consultores y profesionales que quieren automatizar su proceso de entrega a clientes.'
   ]
-);
+) ON CONFLICT (id) DO UPDATE SET 
+  title = EXCLUDED.title, 
+  description = EXCLUDED.description,
+  long_description = EXCLUDED.long_description,
+  category = EXCLUDED.category,
+  price = EXCLUDED.price;
 
 -- MÓDULOS Y LECCIONES NIVEL 2
--- Sesión 0 · Setup
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c2-mod-00', 'c0000000-0000-0000-0000-000000000002', 'Sesión 0 · Setup', 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000000', 'c0000000-0000-0000-0000-000000000002', 'Sesión 0 · Setup', 1) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000000', 'd2000000-0000-0000-0000-000000000000', 'Instala y configura el Plugin 4C IA', 'Preparación del entorno y definición del negocio a trabajar.', '30:00', true, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c2-les-00', 'm4c2-mod-00', 'Instala y configura el Plugin 4C IA', 'Preparación del entorno y definición del negocio a trabajar.', '30:00', true, 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000002', 'Sesión 1 · Briefing en vivo', 2) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000001', 'd2000000-0000-0000-0000-000000000001', 'Ejecuta tu briefing con IA', 'Documentación completa de tu negocio en una sesión.', '60:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
--- Sesión 1 · Briefing en vivo
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c2-mod-01', 'c0000000-0000-0000-0000-000000000002', 'Sesión 1 · Briefing en vivo', 2);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000002', 'Sesión 2 · Estudio de Mercado en vivo', 3) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000002', 'd2000000-0000-0000-0000-000000000002', 'Investiga tu mercado en tiempo real', 'Competencia, precios y oportunidades con búsqueda real.', '60:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c2-les-01', 'm4c2-mod-01', 'Ejecuta tu briefing con IA', 'Documentación completa de tu negocio en una sesión.', '60:00', false, 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000002', 'Sesión 3 · Cliente Ideal en vivo', 4) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000003', 'd2000000-0000-0000-0000-000000000003', 'Construye tu perfil de cliente sobre datos reales', 'Perfil 360° verificable aplicado a tu negocio.', '60:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
--- Sesión 2 · Estudio de Mercado en vivo
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c2-mod-02', 'c0000000-0000-0000-0000-000000000002', 'Sesión 2 · Estudio de Mercado en vivo', 3);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000004', 'c0000000-0000-0000-0000-000000000002', 'Sesión 4 · Valor y Posicionamiento en vivo', 5) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000004', 'd2000000-0000-0000-0000-000000000004', 'Formula tu diferencial con datos', 'Propuesta de valor y posicionamiento aplicados.', '60:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c2-les-02', 'm4c2-mod-02', 'Investiga tu mercado en tiempo real', 'Competencia, precios y oportunidades con búsqueda real.', '60:00', false, 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000005', 'c0000000-0000-0000-0000-000000000002', 'Sesión 5 · Estrategia de Contenidos en vivo', 6) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000005', 'd2000000-0000-0000-0000-000000000005', 'Arma tu calendario editorial real', 'Plan de 30 días listo para publicar.', '60:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
--- Sesión 3 · Cliente Ideal en vivo
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c2-mod-03', 'c0000000-0000-0000-0000-000000000002', 'Sesión 3 · Cliente Ideal en vivo', 4);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000006', 'c0000000-0000-0000-0000-000000000002', 'Sesión 6 · Branding y Dirección Visual en vivo', 7) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000006', 'd2000000-0000-0000-0000-000000000006', 'Traduce tu marca a un sistema visual', 'Guía visual completa y documentada.', '60:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c2-les-03', 'm4c2-mod-03', 'Construye tu perfil de cliente sobre datos reales', 'Perfil 360° verificable aplicado a tu negocio.', '60:00', false, 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000007', 'c0000000-0000-0000-0000-000000000002', 'Sesión 7 · Piezas Visuales en vivo', 8) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000007', 'd2000000-0000-0000-0000-000000000007', 'Produce piezas listas para publicar', 'Contenido real producido en sesión.', '60:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
--- Sesión 4 · Valor y Posicionamiento en vivo
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c2-mod-04', 'c0000000-0000-0000-0000-000000000002', 'Sesión 4 · Valor y Posicionamiento en vivo', 5);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000008', 'c0000000-0000-0000-0000-000000000002', 'Sesión 8 · Mensajes y Video en vivo', 9) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000008', 'd2000000-0000-0000-0000-000000000008', 'Tu banco de mensajes y tu primer guión', 'Hooks, copy y guión de video aprobado.', '60:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c2-les-04', 'm4c2-mod-04', 'Formula tu diferencial con datos', 'Propuesta de valor y posicionamiento aplicados.', '60:00', false, 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000009', 'c0000000-0000-0000-0000-000000000002', 'Sesión 9 · Ruta de Conversión en vivo', 10) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000009', 'd2000000-0000-0000-0000-000000000009', 'Diseña tu proceso de venta completo', 'Del primer mensaje al cierre, personalizado.', '60:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
--- Sesión 5 · Estrategia de Contenidos en vivo
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c2-mod-05', 'c0000000-0000-0000-0000-000000000002', 'Sesión 5 · Estrategia de Contenidos en vivo', 6);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000010', 'c0000000-0000-0000-0000-000000000002', 'Sesión 10 · Fidelización en vivo', 11) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000010', 'd2000000-0000-0000-0000-000000000010', 'Construye tu sistema de retención', 'Postventa, referidos, pipeline y métricas.', '60:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c2-les-05', 'm4c2-mod-05', 'Arma tu calendario editorial real', 'Plan de 30 días listo para publicar.', '60:00', false, 1);
-
--- Sesión 6 · Branding y Dirección Visual en vivo
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c2-mod-06', 'c0000000-0000-0000-0000-000000000002', 'Sesión 6 · Branding y Dirección Visual en vivo', 7);
-
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c2-les-06', 'm4c2-mod-06', 'Traduce tu marca a un sistema visual', 'Guía visual completa y documentada.', '60:00', false, 1);
-
--- Sesión 7 · Piezas Visuales en vivo
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c2-mod-07', 'c0000000-0000-0000-0000-000000000002', 'Sesión 7 · Piezas Visuales en vivo', 8);
-
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c2-les-07', 'm4c2-mod-07', 'Produce piezas listas para publicar', 'Contenido real producido en sesión.', '60:00', false, 1);
-
--- Sesión 8 · Mensajes y Video en vivo
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c2-mod-08', 'c0000000-0000-0000-0000-000000000002', 'Sesión 8 · Mensajes y Video en vivo', 9);
-
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c2-les-08', 'm4c2-mod-08', 'Tu banco de mensajes y tu primer guión', 'Hooks, copy y guión de video aprobado.', '60:00', false, 1);
-
--- Sesión 9 · Ruta de Conversión en vivo
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c2-mod-09', 'c0000000-0000-0000-0000-000000000002', 'Sesión 9 · Ruta de Conversión en vivo', 10);
-
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c2-les-09', 'm4c2-mod-09', 'Diseña tu proceso de venta completo', 'Del primer mensaje al cierre, personalizado.', '60:00', false, 1);
-
--- Sesión 10 · Fidelización en vivo
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c2-mod-10', 'c0000000-0000-0000-0000-000000000002', 'Sesión 10 · Fidelización en vivo', 11);
-
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c2-les-10', 'm4c2-mod-10', 'Construye tu sistema de retención', 'Postventa, referidos, pipeline y métricas.', '60:00', false, 1);
-
--- Cierre y Graduación
-INSERT INTO public.modules (id, course_id, title, order_index) VALUES
-('m4c2-mod-11', 'c0000000-0000-0000-0000-000000000002', 'Cierre y Graduación', 12);
-
-INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES
-('m4c2-les-11', 'm4c2-mod-11', 'Tu Carpeta 4C aplicada y tu plugin permanente', 'Revisión final, presentación de resultados y entrega oficial.', '45:00', false, 1);
+INSERT INTO public.modules (id, course_id, title, order_index) VALUES ('d2000000-0000-0000-0000-000000000011', 'c0000000-0000-0000-0000-000000000002', 'Cierre y Graduación', 12) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.lessons (id, module_id, title, description, duration, is_free, order_index) VALUES ('e2000000-0000-0000-0000-000000000011', 'd2000000-0000-0000-0000-000000000011', 'Tu Carpeta 4C aplicada y tu plugin permanente', 'Revisión final, presentación de resultados y entrega oficial.', '45:00', false, 1) ON CONFLICT (id) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description;
 
 COMMIT;
 
