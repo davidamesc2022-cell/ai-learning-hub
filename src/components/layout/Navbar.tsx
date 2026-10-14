@@ -18,7 +18,7 @@ const NAV_LINKS_AUTH = [
   { label: "Cursos", to: "/courses" },
   { label: "Mi Dashboard", to: "/dashboard" },
   { label: "Comunidad", to: "/community" },
-  { label: "Leaderboard", to: "/leaderboard" },
+  { label: "Ranking", to: "/leaderboard" },
 ];
 
 export default function Navbar() {

@@ -90,7 +90,7 @@ export function GlobalSearch() {
                         </CommandItem>
                         <CommandItem onSelect={() => runCommand(() => navigate("/leaderboard"))}>
                             <Trophy className="mr-2 h-4 w-4" />
-                            <span>Leaderboard</span>
+                            <span>Ranking</span>
                         </CommandItem>
                     </CommandGroup>
                 </CommandList>
