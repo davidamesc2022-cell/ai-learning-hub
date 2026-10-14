@@ -70,6 +70,7 @@ export default function CourseDetail() {
   const safeRequirements = course.requirements || ["Conexión a internet", "Ganas de aprender"];
   const safeForWho = course.forWho || ["Estudiantes", "Profesionales", "Curiosos de la tecnología"];
   const safeModules = course.modules || [];
+  const firstFreeLesson = safeModules.flatMap(m => m.lessons || []).find(l => l.isFree);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -164,6 +165,10 @@ export default function CourseDetail() {
                                     key={lesson.id} 
                                     onClick={async () => {
                                       if (!canPlay) return;
+                                      if (lesson.isFree) {
+                                        navigate(`/learn/${course.id}/${lesson.id}`);
+                                        return;
+                                      }
                                       if (!user) {
                                         navigate("/auth");
                                         return;
@@ -248,7 +253,7 @@ export default function CourseDetail() {
             <aside className="lg:w-80">
               <div className="bg-card rounded-xl border border-border p-6 sticky top-24">
                 {/* Imagen de Portada del Curso */}
-                <div className="aspect-video w-full rounded-lg overflow-hidden mb-6 bg-muted relative border border-border shadow-inner">
+                <div className="aspect-video w-full rounded-lg overflow-hidden mb-4 bg-muted relative border border-border shadow-inner group">
                   {course.thumbnail || course.thumbnailUrl ? (
                     <img 
                       src={course.thumbnail || course.thumbnailUrl} 
@@ -267,7 +272,30 @@ export default function CourseDetail() {
                       {course.category === "marketing" ? "📊" : "🤖"}
                     </div>
                   )}
+
+                  {firstFreeLesson && (
+                    <Link 
+                      to={`/learn/${course.id}/${firstFreeLesson.id}`}
+                      className="absolute inset-0 bg-black/35 hover:bg-black/50 transition-colors flex flex-col items-center justify-center text-white p-4"
+                    >
+                      <div className="h-12 w-12 rounded-full bg-white/95 text-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform mb-2">
+                        <Play className="h-5 w-5 fill-primary ml-0.5" />
+                      </div>
+                      <span className="text-[11px] font-bold tracking-wide uppercase bg-black/60 px-3 py-1 rounded-full backdrop-blur">
+                        Ver Video de Bienvenida
+                      </span>
+                    </Link>
+                  )}
                 </div>
+
+                {/* Botón directo de video de bienvenida si no está inscrito */}
+                {firstFreeLesson && (!user || !isEnrolledIn(course.id)) && (
+                  <Link to={`/learn/${course.id}/${firstFreeLesson.id}`} className="block mb-4">
+                    <Button variant="outline" className="w-full border-primary/50 text-primary hover:bg-primary/10 font-bold h-11 flex items-center justify-center gap-2 shadow-sm">
+                      <Play className="h-4 w-4 fill-primary" /> Ver Video de Bienvenida (Gratis)
+                    </Button>
+                  </Link>
+                )}
 
                 {/* El precio principal superior fue eliminado para evitar redundancia con el botón de pago único */}
                 {user && isEnrolledIn(course.id) ? (

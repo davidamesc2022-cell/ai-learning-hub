@@ -28,6 +28,8 @@ export default function CoursePlayer() {
   const [notes, setNotes] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const [isClassroomFullscreen, setIsClassroomFullscreen] = useState(false);
+  const [comments, setComments] = useState<{ id: string; author: string; text: string; time: string }[]>([]);
+  const [newComment, setNewComment] = useState("");
 
   const allLessonIdsStr = course?.modules?.flatMap(m => m.lessons?.map(l => l.id) || [])?.join(',') || '';
 
@@ -70,6 +72,39 @@ export default function CoursePlayer() {
 
   const prevLesson = currentIdx > 0 ? allLessons[currentIdx - 1] : null;
   const nextLesson = currentIdx < allLessons.length - 1 ? allLessons[currentIdx + 1] : null;
+
+  useEffect(() => {
+    if (!currentLesson?.id) return;
+    try {
+      const stored = localStorage.getItem(`comments_${currentLesson.id}`);
+      if (stored) {
+        setComments(JSON.parse(stored));
+      } else {
+        setComments([]);
+      }
+    } catch {
+      setComments([]);
+    }
+  }, [currentLesson?.id]);
+
+  const handleAddComment = () => {
+    if (!newComment.trim() || !currentLesson?.id) return;
+    const authorName = user?.name || "Estudiante";
+    const commentItem = {
+      id: `comm_${Date.now()}`,
+      author: authorName,
+      text: newComment.trim(),
+      time: "Hace un momento"
+    };
+    const updated = [commentItem, ...comments];
+    setComments(updated);
+    try {
+      localStorage.setItem(`comments_${currentLesson.id}`, JSON.stringify(updated));
+    } catch (e) {
+      console.error(e);
+    }
+    setNewComment("");
+  };
 
   const handleVideoEnded = async () => {
     if (course && !completed.includes(currentLesson.id) && !isUpdating) {
@@ -253,7 +288,7 @@ export default function CoursePlayer() {
                 <p>
                   {currentLesson.description || "En esta lección aprenderás los conceptos fundamentales necesarios para aplicar IA en tu trabajo diario. Cubriremos las bases teóricas y veremos ejemplos prácticos que podrás replicar inmediatamente."}
                 </p>
-                {currentLesson.title.toLowerCase().includes("imágenes") && (
+                {course?.id === "c0000000-0000-0000-0000-000000000003" && currentLesson.title.toLowerCase().includes("imágenes") && (
                   <div className="bg-primary/5 rounded-xl border border-primary/10 p-4 mt-2">
                     <h4 className="font-bold text-foreground text-xs uppercase tracking-wider mb-2">🎯 ¿Qué lograrás en esta clase?</h4>
                     <p className="text-xs mb-3 text-muted-foreground/90">
@@ -309,15 +344,45 @@ export default function CoursePlayer() {
             </TabsContent>
             <TabsContent value="comentarios">
               <div className="space-y-4">
-                <div className="flex gap-3">
-                  <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold flex-shrink-0">CR</div>
-                  <div>
-                    <p className="text-sm font-medium">Carlos Ramírez <span className="text-xs text-muted-foreground ml-2">Hace 3 días</span></p>
-                    <p className="text-sm text-muted-foreground">Excelente explicación sobre Midjourney y Runway, me sirvió muchísimo para crear mi primer comercial con inteligencia artificial. ¿Podrías profundizar más en cómo lograr consistencia en los rostros de los personajes en diferentes tomas?</p>
+                {comments.length > 0 ? (
+                  <div className="space-y-3">
+                    {comments.map((c) => (
+                      <div key={c.id} className="flex gap-3 p-3 bg-muted/20 rounded-lg border border-border/50">
+                        <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold flex-shrink-0">
+                          {c.author.slice(0, 2).toUpperCase()}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">{c.author} <span className="text-xs text-muted-foreground ml-2">{c.time}</span></p>
+                          <p className="text-sm text-muted-foreground mt-0.5 whitespace-pre-wrap">{c.text}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
+                ) : (
+                  <div className="text-center py-8 px-4 bg-muted/20 rounded-xl border border-dashed border-border">
+                    <MessageSquare className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
+                    <p className="text-sm font-medium text-foreground">Aún no hay comentarios en esta lección</p>
+                    <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
+                      ¿Tienes alguna duda o aporte sobre esta clase? Deja tu comentario abajo.
+                    </p>
+                  </div>
+                )}
+
+                <div className="space-y-2 pt-2">
+                  <Textarea 
+                    placeholder="Escribe tu consulta o aporte sobre esta lección..." 
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    className="min-h-[80px]" 
+                  />
+                  <Button 
+                    size="sm"
+                    onClick={handleAddComment}
+                    disabled={!newComment.trim()}
+                  >
+                    Publicar Comentario
+                  </Button>
                 </div>
-                <Textarea placeholder="Escribe un comentario..." className="min-h-[80px]" />
-                <Button size="sm">Comentar</Button>
               </div>
             </TabsContent>
           </Tabs>
