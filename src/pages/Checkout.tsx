@@ -139,7 +139,7 @@ export default function Checkout() {
                   ) : (
                     <>
                       <Lock className="mr-2 h-5 w-5" />
-                      Pagar ${cartCourse.price} USD de forma segura
+                      Pagar S/ {cartCourse.price} de forma segura
                     </>
                   )}
                 </Button>
@@ -171,15 +171,15 @@ export default function Checkout() {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-muted-foreground text-sm">
                   <span>Precio</span>
-                  <span>${cartCourse.price} USD</span>
+                  <span>S/ {cartCourse.price}</span>
                 </div>
                  <div className="flex justify-between text-muted-foreground text-sm">
                   <span>Impuestos incluidos</span>
-                  <span>$0.00 USD</span>
+                  <span>S/ 0.00</span>
                 </div>
                 <div className="flex justify-between font-bold text-xl pt-4 border-t border-border">
                   <span>Total</span>
-                  <span className="text-primary">${cartCourse.price} USD</span>
+                  <span className="text-primary">S/ {cartCourse.price}</span>
                 </div>
               </div>
 

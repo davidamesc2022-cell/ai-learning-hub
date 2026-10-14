@@ -332,7 +332,7 @@ export default function CourseDetail() {
                           size="lg"
                         >
                           {isEnrolling ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                          Comprar solo este curso por ${course.price}
+                          Comprar solo este curso por S/ {course.price}
                         </Button>
                       </>
                     )}

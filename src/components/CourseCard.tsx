@@ -121,7 +121,7 @@ export default function CourseCard({ course }: { course: Course }) {
             {course.isFree ? (
               <Badge className="bg-success/10 text-success border-success/30 font-semibold">Gratis</Badge>
             ) : (
-              <span className="font-bold text-primary">${course.price}</span>
+              <span className="font-bold text-primary">S/ {course.price}</span>
             )}
           </div>
         </div>

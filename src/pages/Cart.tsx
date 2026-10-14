@@ -63,7 +63,7 @@ export default function Cart() {
                     >
                       <Trash2 className="h-4 w-4" /> Eliminar
                     </button>
-                    <span className="font-extrabold text-xl text-primary">${cartCourse.price} USD</span>
+                    <span className="font-extrabold text-xl text-primary">S/ {cartCourse.price}</span>
                   </div>
                 </div>
               </div>
@@ -78,11 +78,11 @@ export default function Cart() {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-muted-foreground">
                   <span>Precio original</span>
-                  <span>${cartCourse.price} USD</span>
+                  <span>S/ {cartCourse.price}</span>
                 </div>
                 <div className="flex justify-between font-bold text-lg pt-4 border-t border-border">
                   <span>Total</span>
-                  <span className="text-primary">${cartCourse.price} USD</span>
+                  <span className="text-primary">S/ {cartCourse.price}</span>
                 </div>
               </div>
               
