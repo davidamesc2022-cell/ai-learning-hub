@@ -153,9 +153,23 @@ export default function CourseDetail() {
                 <TabsContent value="curriculum">
                   {safeModules.length > 0 ? (
                     <Accordion type="multiple" defaultValue={["m1"]} className="space-y-3">
-                      {safeModules.map((mod) => (
+                      {safeModules.map((mod) => {
+                        const hasOnlyPaidLessons = (mod.lessons || []).length > 0 && (mod.lessons || []).every((l: any) => !l.isFree);
+                        const isLockedForUser = hasOnlyPaidLessons && (!user || !isEnrolledIn(course.id));
+                        return (
                         <AccordionItem key={mod.id} value={mod.id} className="border border-border rounded-lg px-4">
-                          <AccordionTrigger className="text-sm font-semibold hover:no-underline">{mod.title}</AccordionTrigger>
+                          <AccordionTrigger className="text-sm font-semibold hover:no-underline">
+                            <div className="flex items-center gap-2 text-left pr-2">
+                              <span>{mod.title}</span>
+                              {isLockedForUser ? (
+                                <Lock className="h-3.5 w-3.5 text-amber-500/80 shrink-0" />
+                              ) : (
+                                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-primary/10 text-primary border-primary/20 shrink-0">
+                                  Gratis
+                                </Badge>
+                              )}
+                            </div>
+                          </AccordionTrigger>
                           <AccordionContent>
                             <div className="space-y-2 pb-2">
                               {(mod.lessons || []).map((lesson) => {
@@ -203,7 +217,8 @@ export default function CourseDetail() {
                             </div>
                           </AccordionContent>
                         </AccordionItem>
-                      ))}
+                        );
+                      })}
                     </Accordion>
                   ) : (
                     <div className="text-center py-10 bg-muted/20 rounded-lg border border-border border-dashed">
