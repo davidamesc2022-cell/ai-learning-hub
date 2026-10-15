@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/layout/Navbar";
 import { useAuth } from "@/hooks/useAuth";
 import OnboardingModal from "@/components/OnboardingModal";
+import { triggerInAppWelcomeNotification } from "@/lib/emailService";
 
 // ── Schemas de validación ─────────────────────────────────────
 const loginSchema = z.object({
@@ -224,6 +225,7 @@ function RegisterFormComponent() {
     if (ok) {
       setSuccess(true);
       setRegisteredName(data.name);
+      triggerInAppWelcomeNotification(data.name);
       // Mostrar onboarding en lugar de redirigir directamente
       setTimeout(() => setShowOnboarding(true), 600);
     }

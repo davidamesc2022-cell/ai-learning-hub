@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Bell, Menu, X, ChevronDown, LogOut, User, BookOpen, Settings, CheckCheck } from "lucide-react";
+import { Bell, Menu, X, ChevronDown, LogOut, User, BookOpen, Settings, CheckCheck, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNotificationStore } from "@/store/useNotificationStore";
 import { GlobalSearch } from "@/components/layout/GlobalSearch";
 import { useAuth } from "@/hooks/useAuth";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { isUserAdmin } from "@/data/constants";
 import { useTheme } from "next-themes";
 
 const NAV_LINKS_PUBLIC = [
@@ -24,6 +25,7 @@ const NAV_LINKS_AUTH = [
 export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
   const isAuth = isAuthenticated;
+  const isAdmin = isUserAdmin(user?.email);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
@@ -130,6 +132,14 @@ export default function Navbar() {
                 </button>
                 {profileOpen && (
                   <div className="absolute right-0 top-12 w-48 bg-card rounded-xl shadow-xl border border-border py-2 animate-fade-in z-50">
+                    {isAdmin && (
+                      <>
+                        <Link to="/admin" className="flex items-center gap-2 px-4 py-2 text-sm text-primary font-bold hover:bg-primary/10 transition-colors" onClick={() => setProfileOpen(false)}>
+                          <ShieldCheck className="h-4 w-4" /> Panel Admin
+                        </Link>
+                        <hr className="my-1 border-border" />
+                      </>
+                    )}
                     <Link to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted transition-colors" onClick={() => setProfileOpen(false)}><User className="h-4 w-4" /> Mi Perfil</Link>
                     <Link to="/dashboard" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted transition-colors" onClick={() => setProfileOpen(false)}><BookOpen className="h-4 w-4" /> Mis Cursos</Link>
                     <Link to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted transition-colors" onClick={() => setProfileOpen(false)}><Settings className="h-4 w-4" /> Configuración</Link>
@@ -163,6 +173,11 @@ export default function Navbar() {
             <div className="pb-2 border-b border-slate-800">
               <ThemeToggle />
             </div>
+            {isAuth && isAdmin && (
+              <Link to="/admin" className="block py-2 text-sm font-bold text-primary flex items-center gap-2" onClick={() => setMobileOpen(false)}>
+                <ShieldCheck className="h-4 w-4" /> Panel de Administrador
+              </Link>
+            )}
             {links.map((l) => (
               <Link key={l.to} to={l.to} className={`block py-2 text-sm font-medium ${isDark ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900"}`} onClick={() => setMobileOpen(false)}>{l.label}</Link>
             ))}

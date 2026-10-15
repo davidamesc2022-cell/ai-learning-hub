@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { 
   Play, Pause, Volume2, Maximize, CheckCircle, ChevronLeft, ChevronRight, Lock, 
   FileText, MessageSquare, StickyNote, Laptop, ExternalLink, Download, 
-  Maximize2, Minimize2, Target, CheckSquare, Sparkles 
+  Maximize2, Minimize2, Target, CheckSquare, Sparkles, ShieldCheck, MessageCircle, ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,13 +14,14 @@ import { Progress } from "@/components/ui/progress";
 import Navbar from "@/components/layout/Navbar";
 import { useCourses } from "@/hooks/useCourses";
 import { useAuth } from "@/hooks/useAuth";
+import { isUserAdmin } from "@/data/constants";
 import VideoPlayer from "@/components/courses/VideoPlayer";
 
 export default function CoursePlayer() {
   const { courseId, lessonId } = useParams();
   const navigate = useNavigate();
   const { getCourseById, isLoading } = useCourses();
-  const { user, getCompletedLessons, completeLesson } = useAuth();
+  const { user, getCompletedLessons, completeLesson, isEnrolledIn } = useAuth();
   
   const course = courseId ? getCourseById(courseId) : undefined;
   
@@ -53,20 +54,29 @@ export default function CoursePlayer() {
     );
   }
 
-  if (!course || !course.modules || course.modules.length === 0) {
+  const allLessons = course?.modules?.flatMap((m) => m.lessons || []) || [];
+  const currentIdx = allLessons.findIndex((l) => l.id === lessonId);
+  const currentLesson = currentIdx !== -1 ? allLessons[currentIdx] : allLessons[0];
+
+  if (!course || !course.modules || course.modules.length === 0 || allLessons.length === 0 || !currentLesson) {
     return (
       <div className="min-h-screen flex flex-col bg-background">
         <Navbar />
-        <div className="flex-1 flex items-center justify-center p-20 text-center text-muted-foreground">
-          No se pudieron cargar las lecciones de este curso.
+        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-muted-foreground">
+          <p className="text-lg font-bold text-foreground mb-2">Este curso aún no tiene lecciones publicadas.</p>
+          <p className="text-sm max-w-md mb-6">Si eres administrador, asegúrate de haber insertado los módulos y lecciones en Supabase.</p>
+          <Link to="/courses">
+            <Button variant="outline">Volver al Catálogo de Cursos</Button>
+          </Link>
         </div>
       </div>
     );
   }
 
-  const allLessons = course.modules.flatMap((m) => m.lessons || []);
-  const currentIdx = allLessons.findIndex((l) => l.id === lessonId);
-  const currentLesson = currentIdx !== -1 ? allLessons[currentIdx] : allLessons[0];
+  // ── Candado de Seguridad y Control de Acceso ────────────────
+  const isAdmin = isUserAdmin(user?.email);
+  const isEnrolled = Boolean(course?.isFree || (user && isEnrolledIn(course.id)) || isAdmin);
+  const hasLessonAccess = Boolean(isEnrolled || currentLesson?.isFree);
 
   const progress = allLessons.length > 0 ? Math.round((completed.length / allLessons.length) * 100) : 0;
 
@@ -145,13 +155,93 @@ export default function CoursePlayer() {
       <div className="flex flex-col lg:flex-row">
         {/* Main */}
         <div className="flex-1 p-4 lg:p-6 lg:max-w-4xl mx-auto w-full">
-          {/* Video Player */}
+          {/* Video Player o Pantalla de Bloqueo */}
           <div className="mb-6">
-            <VideoPlayer
-              url={currentLesson.videoUrl || ""}
-              title={currentLesson.title}
-              onEnded={handleVideoEnded}
-            />
+            {hasLessonAccess ? (
+              <VideoPlayer
+                url={currentLesson.videoUrl || ""}
+                title={currentLesson.title}
+                onEnded={handleVideoEnded}
+              />
+            ) : (
+              <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-b from-card via-card to-amber-950/20 p-6 md:p-10 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+                
+                <div className="relative z-10 flex flex-col items-center text-center max-w-xl mx-auto">
+                  <div className="h-16 w-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 mb-5 shadow-inner">
+                    <Lock className="h-8 w-8 animate-pulse" />
+                  </div>
+
+                  <Badge variant="outline" className="mb-3 border-amber-500/30 bg-amber-500/10 text-amber-400 font-semibold text-xs px-3 py-1">
+                    🔒 Contenido Exclusivo para Alumnos
+                  </Badge>
+
+                  <h2 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight mb-3">
+                    {currentLesson.title}
+                  </h2>
+
+                  <p className="text-sm md:text-base text-muted-foreground mb-6 leading-relaxed">
+                    Esta lección forma parte del curso oficial <span className="text-foreground font-semibold">"{course.title}"</span>. Para ver la clase en video, interactuar con el aula práctica y descargar los materiales, matricúlate ahora.
+                  </p>
+
+                  {/* Resumen del Curso */}
+                  <div className="w-full bg-background/80 backdrop-blur-md rounded-xl p-4 border border-border mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 text-left w-full sm:w-auto">
+                      {course.thumbnail && (
+                        <img src={course.thumbnail} alt={course.title} className="w-14 h-14 rounded-lg object-cover border border-border flex-shrink-0" />
+                      )}
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wider font-bold">Curso Oficial</p>
+                        <p className="text-sm font-bold text-foreground line-clamp-1">{course.title}</p>
+                        <p className="text-xs text-muted-foreground">{course.duration} · {allLessons.length} lecciones</p>
+                      </div>
+                    </div>
+                    <div className="text-right sm:text-right w-full sm:w-auto flex sm:flex-col justify-between items-center sm:items-end">
+                      <span className="text-xs text-muted-foreground">Inversión</span>
+                      <span className="text-lg font-black text-primary">
+                        {course.isFree ? "Gratis" : `US$ ${course.price}`}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Botones de Acción */}
+                  <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
+                    {!user ? (
+                      <>
+                        <Link to={`/auth?redirect=/learn/${course.id}/${currentLesson.id}`} className="w-full sm:w-auto">
+                          <Button size="lg" className="w-full gradient-hero text-primary-foreground border-0 font-bold shadow-lg">
+                            Iniciar Sesión / Registrarme
+                          </Button>
+                        </Link>
+                        <Link to={`/courses/${course.id}`} className="w-full sm:w-auto">
+                          <Button size="lg" variant="outline" className="w-full">
+                            Ver Detalles del Curso
+                          </Button>
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <Link to={`/courses/${course.id}`} className="w-full sm:w-auto">
+                          <Button size="lg" className="w-full gradient-hero text-primary-foreground border-0 font-bold shadow-lg">
+                            Adquirir Curso ({course.isFree ? "Gratis" : `US$ ${course.price}`})
+                          </Button>
+                        </Link>
+                        <a
+                          href={`https://wa.me/51953282247?text=${encodeURIComponent(`Hola David Ames, deseo matricularme en el curso "${course.title}". Mi correo registrado es: ${user.email}`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full sm:w-auto"
+                        >
+                          <Button size="lg" variant="outline" className="w-full border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10">
+                            <MessageCircle className="h-4 w-4 mr-2" /> Matrícula Directa por WhatsApp
+                          </Button>
+                        </a>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <h2 className="text-xl font-bold mb-4">{currentLesson.title}</h2>
@@ -182,105 +272,132 @@ export default function CoursePlayer() {
             {/* TAB: AULA INTERACTIVA */}
             {currentLesson.interactiveClassroomUrl && (
               <TabsContent value="aula">
-                <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-muted/40 border border-border">
-                    <div>
-                      <h3 className="font-bold text-base flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-cyan-400" />
-                        Aula Interactiva · {currentLesson.title}
-                      </h3>
-                      <p className="text-xs text-muted-foreground mt-0.5">
-                        Explora los conceptos, ramas e interacciones paso a paso.
-                      </p>
+                {!hasLessonAccess ? (
+                  <div className="p-10 text-center bg-card rounded-xl border border-amber-500/20 shadow-sm">
+                    <div className="h-12 w-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-3">
+                      <Lock className="h-6 w-6" />
                     </div>
-
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setIsClassroomFullscreen(!isClassroomFullscreen)}
-                        className="text-xs"
-                      >
-                        {isClassroomFullscreen ? (
-                          <><Minimize2 className="w-3.5 h-3.5 mr-1.5" /> Salir de Pantalla Completa</>
-                        ) : (
-                          <><Maximize2 className="w-3.5 h-3.5 mr-1.5" /> Pantalla Completa</>
-                        )}
+                    <h3 className="font-bold text-lg mb-1">Aula Interactiva Protegida</h3>
+                    <p className="text-sm text-muted-foreground max-w-md mx-auto mb-4">
+                      El explorador interactivo paso a paso y la descarga del software pedagógico están reservados exclusivamente para alumnos matriculados en este curso.
+                    </p>
+                    <Link to={`/courses/${course.id}`}>
+                      <Button size="sm" className="gradient-hero text-primary-foreground border-0 font-bold">
+                        Matricularme para desbloquear
                       </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-muted/40 border border-border">
+                      <div>
+                        <h3 className="font-bold text-base flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-cyan-400" />
+                          Aula Interactiva · {currentLesson.title}
+                        </h3>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          Explora los conceptos, ramas e interacciones paso a paso.
+                        </p>
+                      </div>
 
-                      <a 
-                        href={currentLesson.interactiveClassroomUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                      >
-                        <Button size="sm" variant="secondary" className="text-xs">
-                          <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> Abrir en nueva pestaña
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setIsClassroomFullscreen(!isClassroomFullscreen)}
+                          className="text-xs"
+                        >
+                          {isClassroomFullscreen ? (
+                            <><Minimize2 className="w-3.5 h-3.5 mr-1.5" /> Salir de Pantalla Completa</>
+                          ) : (
+                            <><Maximize2 className="w-3.5 h-3.5 mr-1.5" /> Pantalla Completa</>
+                          )}
                         </Button>
-                      </a>
 
-                      {currentLesson.allowDownloadClassroom && (
                         <a 
                           href={currentLesson.interactiveClassroomUrl} 
-                          download
-                          target="_blank"
+                          target="_blank" 
                           rel="noopener noreferrer"
                         >
-                          <Button size="sm" variant="outline" className="text-xs">
-                            <Download className="w-3.5 h-3.5 mr-1.5" /> Descargar Aula (.html)
+                          <Button size="sm" variant="secondary" className="text-xs">
+                            <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> Abrir en nueva pestaña
                           </Button>
                         </a>
+
+                        {currentLesson.allowDownloadClassroom && (
+                          <a 
+                            href={currentLesson.interactiveClassroomUrl} 
+                            download
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            <Button size="sm" variant="outline" className="text-xs">
+                              <Download className="w-3.5 h-3.5 mr-1.5" /> Descargar Aula (.html)
+                            </Button>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Visor Iframe del Aula */}
+                    <div className={`rounded-xl border border-border overflow-hidden bg-slate-950 transition-all ${
+                      isClassroomFullscreen ? "fixed inset-4 z-50 shadow-2xl flex flex-col bg-slate-950" : "w-full h-[620px]"
+                    }`}>
+                      {isClassroomFullscreen && (
+                        <div className="p-3 bg-slate-900 border-b border-border flex items-center justify-between">
+                          <span className="text-xs font-semibold text-slate-200 flex items-center gap-2">
+                            <Laptop className="w-4 h-4 text-cyan-400" /> Aula Interactiva · Modo Pantalla Completa
+                          </span>
+                          <Button size="sm" variant="ghost" onClick={() => setIsClassroomFullscreen(false)}>
+                            <Minimize2 className="w-4 h-4 mr-1.5" /> Cerrar
+                          </Button>
+                        </div>
                       )}
+                      <iframe
+                        src={currentLesson.interactiveClassroomUrl}
+                        title={`Aula Interactiva: ${currentLesson.title}`}
+                        className="w-full h-full border-0 flex-1 bg-white"
+                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                      />
                     </div>
                   </div>
-
-                  {/* Visor Iframe del Aula */}
-                  <div className={`rounded-xl border border-border overflow-hidden bg-slate-950 transition-all ${
-                    isClassroomFullscreen ? "fixed inset-4 z-50 shadow-2xl flex flex-col bg-slate-950" : "w-full h-[620px]"
-                  }`}>
-                    {isClassroomFullscreen && (
-                      <div className="p-3 bg-slate-900 border-b border-border flex items-center justify-between">
-                        <span className="text-xs font-semibold text-slate-200 flex items-center gap-2">
-                          <Laptop className="w-4 h-4 text-cyan-400" /> Aula Interactiva · Modo Pantalla Completa
-                        </span>
-                        <Button size="sm" variant="ghost" onClick={() => setIsClassroomFullscreen(false)}>
-                          <Minimize2 className="w-4 h-4 mr-1.5" /> Cerrar
-                        </Button>
-                      </div>
-                    )}
-                    <iframe
-                      src={currentLesson.interactiveClassroomUrl}
-                      title={`Aula Interactiva: ${currentLesson.title}`}
-                      className="w-full h-full border-0 flex-1 bg-white"
-                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                    />
-                  </div>
-                </div>
+                )}
               </TabsContent>
             )}
 
             {/* TAB: AHORA HAZLO TÚ (TAREA / APLICACIÓN PRÁCTICA) */}
             {currentLesson.assignment && (
               <TabsContent value="tarea">
-                <div className="p-6 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-amber-500/15 text-amber-500">
-                      <Target className="w-5 h-5" />
+                {!hasLessonAccess ? (
+                  <div className="p-8 text-center bg-card rounded-xl border border-amber-500/20 shadow-sm">
+                    <Lock className="h-8 w-8 text-amber-500/70 mx-auto mb-2" />
+                    <h3 className="font-semibold text-base mb-1">Actividad Práctica Reservada</h3>
+                    <p className="text-xs text-muted-foreground max-w-md mx-auto">
+                      Las consignas y proyectos de aplicación práctica en tu cuenta real son exclusivas para alumnos matriculados en este curso.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="p-6 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-xl bg-amber-500/15 text-amber-500">
+                        <Target className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-base text-foreground">Ahora hazlo tú: Aplicación en tu cuenta real</h3>
+                        <p className="text-xs text-muted-foreground">Consigna de aplicación práctica del módulo</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-base text-foreground">Ahora hazlo tú: Aplicación en tu cuenta real</h3>
-                      <p className="text-xs text-muted-foreground">Consigna de aplicación práctica del módulo</p>
+
+                    <div className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap pl-3 border-l-2 border-amber-500/50 py-1">
+                      {currentLesson.assignment}
+                    </div>
+
+                    <div className="pt-2 text-xs text-muted-foreground flex items-center gap-2">
+                      <CheckSquare className="w-4 h-4 text-primary shrink-0" />
+                      <span>Realiza esta práctica en tu cuenta de ChatGPT para consolidar la transformación de este módulo.</span>
                     </div>
                   </div>
-
-                  <div className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap pl-3 border-l-2 border-amber-500/50 py-1">
-                    {currentLesson.assignment}
-                  </div>
-
-                  <div className="pt-2 text-xs text-muted-foreground flex items-center gap-2">
-                    <CheckSquare className="w-4 h-4 text-primary shrink-0" />
-                    <span>Realiza esta práctica en tu cuenta de ChatGPT para consolidar la transformación de este módulo.</span>
-                  </div>
-                </div>
+                )}
               </TabsContent>
             )}
             <TabsContent value="descripcion">
@@ -318,25 +435,35 @@ export default function CoursePlayer() {
               </div>
             </TabsContent>
             <TabsContent value="recursos">
-              <div className="space-y-3">
-                {currentLesson.resources && currentLesson.resources.length > 0 ? (
-                  currentLesson.resources.map((res: any) => (
-                    <div key={res.id || res.name} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-primary" />
-                        <span className="text-sm font-medium">{res.name}</span>
+              {!hasLessonAccess ? (
+                <div className="p-8 text-center bg-card rounded-xl border border-amber-500/20 shadow-sm">
+                  <Lock className="h-8 w-8 text-amber-500/70 mx-auto mb-2" />
+                  <h3 className="font-semibold text-base mb-1">Recursos y Plantillas Protegidos</h3>
+                  <p className="text-xs text-muted-foreground max-w-md mx-auto">
+                    La descarga de archivos de trabajo, prompts y recursos complementarios está disponible únicamente para alumnos matriculados.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {currentLesson.resources && currentLesson.resources.length > 0 ? (
+                    currentLesson.resources.map((res: any) => (
+                      <div key={res.id || res.name} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <FileText className="h-4 w-4 text-primary" />
+                          <span className="text-sm font-medium">{res.name}</span>
+                        </div>
+                        <a href={res.url} target="_blank" rel="noopener noreferrer">
+                          <Button size="sm" variant="outline">Descargar</Button>
+                        </a>
                       </div>
-                      <a href={res.url} target="_blank" rel="noopener noreferrer">
-                        <Button size="sm" variant="outline">Descargar</Button>
-                      </a>
+                    ))
+                  ) : (
+                    <div className="text-center py-6 text-muted-foreground text-sm">
+                      No hay recursos adicionales para esta lección.
                     </div>
-                  ))
-                ) : (
-                  <div className="text-center py-6 text-muted-foreground text-sm">
-                    No hay recursos adicionales para esta lección.
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </TabsContent>
             <TabsContent value="notas">
               <Textarea placeholder="Escribe tus notas aquí..." value={notes} onChange={(e) => setNotes(e.target.value)} className="min-h-[200px]" />
@@ -408,14 +535,30 @@ export default function CoursePlayer() {
                     {mod.lessons.map((lesson) => {
                       const isActive = lesson.id === currentLesson.id;
                       const isDone = completed.includes(lesson.id);
+                      const isLessonFree = Boolean(lesson.isFree);
+                      const canAccess = isEnrolled || isLessonFree;
+
                       return (
                         <Link
                           key={lesson.id}
                           to={`/learn/${course.id}/${lesson.id}`}
-                          className={`flex items-center gap-2 py-2 px-2 rounded-lg text-xs transition-colors ${isActive ? "bg-primary/10 text-primary font-medium" : "hover:bg-muted/50"}`}
+                          className={`flex items-center gap-2 py-2 px-2 rounded-lg text-xs transition-colors ${
+                            isActive 
+                              ? "bg-primary/10 text-primary font-medium" 
+                              : "hover:bg-muted/50"
+                          }`}
                         >
-                          {isDone ? <CheckCircle className="h-3.5 w-3.5 text-success flex-shrink-0" /> : lesson.isFree ? <Play className="h-3.5 w-3.5 flex-shrink-0" /> : <Lock className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />}
+                          {isDone ? (
+                            <CheckCircle className="h-3.5 w-3.5 text-success flex-shrink-0" />
+                          ) : canAccess ? (
+                            <Play className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+                          ) : (
+                            <Lock className="h-3.5 w-3.5 text-amber-500/70 flex-shrink-0" />
+                          )}
                           <span className="flex-1 truncate">{lesson.title}</span>
+                          {isLessonFree && !isEnrolled && (
+                            <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded font-bold">Gratis</span>
+                          )}
                           <span className="text-muted-foreground">{lesson.duration}</span>
                         </Link>
                       );
@@ -430,11 +573,13 @@ export default function CoursePlayer() {
             <Button
               onClick={handleMarkComplete}
               className="w-full gradient-hero text-primary-foreground border-0"
-              disabled={!user || completed.includes(currentLesson.id) || isUpdating}
+              disabled={!user || !hasLessonAccess || completed.includes(currentLesson.id) || isUpdating}
             >
               {!user 
                 ? "Regístrate para guardar progreso" 
-                : (completed.includes(currentLesson.id) ? "✓ Completada" : (isUpdating ? "Guardando..." : "Marcar como Completada"))}
+                : !hasLessonAccess
+                  ? "🔒 Matrícula requerida"
+                  : (completed.includes(currentLesson.id) ? "✓ Completada" : (isUpdating ? "Guardando..." : "Marcar como Completada"))}
             </Button>
             <div className="flex gap-2">
               {prevLesson && <Link to={`/learn/${course.id}/${prevLesson.id}`} className="flex-1"><Button variant="outline" className="w-full text-xs"><ChevronLeft className="h-3 w-3 mr-1" />Anterior</Button></Link>}

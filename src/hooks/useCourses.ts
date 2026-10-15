@@ -67,24 +67,44 @@ export function useCourses(initialFilters?: Partial<CourseFilters>) {
                     duration: row.duration,
                     lessonsCount: row.lessons_count,
                     thumbnail: (() => {
+                        // Si el thumbnail en base de datos ya especifica una imagen local válida, respetarla prioritariamente
+                        if (row.thumbnail && row.thumbnail.startsWith("/images/")) {
+                            return row.thumbnail;
+                        }
+
+                        // Cursos oficiales de Claude por Nivel
+                        const titleLower = (row.title || "").toLowerCase();
+                        if (row.id === "c0000000-0000-0000-0000-000000000006" || (titleLower.includes("claude") && titleLower.includes("nivel 1"))) {
+                            return "/images/curso-claude-nivel1.jpg";
+                        }
+                        if (row.id === "c0000000-0000-0000-0000-000000000007" || (titleLower.includes("claude") && titleLower.includes("nivel 2"))) {
+                            return "/images/curso-claude-nivel2.jpg";
+                        }
+                        if (row.id === "c0000000-0000-0000-0000-000000000008" || (titleLower.includes("claude") && titleLower.includes("nivel 3"))) {
+                            return "/images/curso-claude-nivel3.jpg";
+                        }
+                        if (titleLower.includes("claude")) {
+                            return "/images/curso-claude-nivel1.jpg";
+                        }
+
                         if (
-                            row.title?.toLowerCase().includes("generación de imágenes") || 
-                            row.title?.toLowerCase().includes("generacion de imagenes") || 
+                            titleLower.includes("generación de imágenes") || 
+                            titleLower.includes("generacion de imagenes") || 
                             row.id === "c0000000-0000-0000-0000-000000000003" ||
                             row.thumbnail?.includes("photo-1618005182384-a83a8bd57fbe")
                         ) {
                             return "/images/generacion-imagenes-video-ia.jpg";
                         }
-                        if (row.title?.toLowerCase().includes("chatgpt sin confusión") || row.id === "c0000000-0000-0000-0000-000000000005") {
+                        if (titleLower.includes("chatgpt sin confusión") || row.id === "c0000000-0000-0000-0000-000000000005") {
                             return "/images/curso-chatgpt-sin-confusion.jpg";
                         }
-                        if (row.id === "c0000000-0000-0000-0000-000000000001" || row.title?.toLowerCase().includes("ventas predecibles") || row.title?.toLowerCase().includes("nivel 1")) {
+                        if (row.id === "c0000000-0000-0000-0000-000000000001" || titleLower.includes("ventas predecibles")) {
                             return "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800";
                         }
-                        if (row.id === "c0000000-0000-0000-0000-000000000002" || row.title?.toLowerCase().includes("acelerador 4c") || row.title?.toLowerCase().includes("nivel 2")) {
+                        if (row.id === "c0000000-0000-0000-0000-000000000002" || titleLower.includes("acelerador 4c")) {
                             return "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800";
                         }
-                        if (row.title?.toLowerCase().includes("domina la ia") || row.id === "c0000000-0000-0000-0000-000000000004") {
+                        if (titleLower.includes("domina la ia") || row.id === "c0000000-0000-0000-0000-000000000004") {
                             return "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800";
                         }
                         if (!row.thumbnail || row.thumbnail.includes("photo-1677442136019-21780efad99a")) {

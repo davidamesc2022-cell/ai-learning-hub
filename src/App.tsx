@@ -18,6 +18,10 @@ import Pricing from "./pages/Pricing";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Terms from "./pages/Terms";
+import Admin from "./pages/Admin";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import ThankYou from "./pages/ThankYou";
 
 const queryClient = new QueryClient();
 
@@ -33,7 +37,12 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/courses/:id" element={<CourseDetail />} />
+              <Route path="/learn/:courseId" element={<CoursePlayer />} />
               <Route path="/learn/:courseId/:lessonId" element={<CoursePlayer />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/thank-you/:courseId" element={<ThankYou />} />
+              <Route path="/admin" element={<Admin />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/leaderboard" element={<Leaderboard />} />

@@ -74,3 +74,13 @@ export const testimonials: Testimonial[] = [
     rating: 5,
   },
 ];
+
+export const ADMIN_EMAILS = [
+  "hablemos@davidamesc.com",
+  "davidamesc2022@gmail.com"
+];
+
+export function isUserAdmin(email?: string | null): boolean {
+  if (!email) return false;
+  return ADMIN_EMAILS.includes(email.trim().toLowerCase());
+}
